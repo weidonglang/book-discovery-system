@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" role="img" aria-labelledby="title desc">
+  <title id="title">Default book cover</title>
+  <desc id="desc">A fallback cover image for books without a valid cover URL.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbeafe"/>
+      <stop offset="100%" stop-color="#eff6ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="48" y="48" width="504" height="704" rx="28" fill="#ffffff" stroke="#bfdbfe" stroke-width="4"/>
+  <rect x="92" y="120" width="416" height="12" rx="6" fill="#93c5fd"/>
+  <rect x="92" y="160" width="300" height="12" rx="6" fill="#cbd5e1"/>
+  <rect x="92" y="356" width="416" height="12" rx="6" fill="#e2e8f0"/>
+  <rect x="92" y="392" width="416" height="12" rx="6" fill="#e2e8f0"/>
+  <rect x="92" y="428" width="340" height="12" rx="6" fill="#e2e8f0"/>
+  <path d="M180 278c0-66.274 53.726-120 120-120s120 53.726 120 120v28H180v-28z" fill="#2563eb" opacity="0.14"/>
+  <path d="M224 294h152c17.673 0 32 14.327 32 32v98H192v-98c0-17.673 14.327-32 32-32z" fill="#2563eb"/>
+  <path d="M244 274h112c13.255 0 24 10.745 24 24v120H220V298c0-13.255 10.745-24 24-24z" fill="#1d4ed8"/>
+  <text x="300" y="560" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="42" font-weight="700" fill="#1e293b">Book Nook</text>
+  <text x="300" y="610" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="24" fill="#64748b">Default Cover</text>
+</svg>

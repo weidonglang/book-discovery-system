@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="login">
+  <div class="app-shell">
+    <main class="page">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">1. 登录页</h1>
+          <p class="page-subtitle">对接 /api/auth/log-in，登录成功后会缓存 accessToken / refreshToken 并拉取当前用户。</p>
+        </div>
+      </div>
+      <div class="grid two">
+        <section class="card">
+          <div id="login-message" class="alert hidden"></div>
+          <form id="login-form">
+            <div class="field">
+              <label class="label" for="api-base-url">API 基地址</label>
+              <input id="api-base-url" placeholder="http://localhost:8010/book-service" />
+            </div>
+            <div class="field">
+              <label class="label" for="email">邮箱</label>
+              <input id="email" type="email" required placeholder="请输入邮箱" />
+            </div>
+            <div class="field">
+              <label class="label" for="password">密码</label>
+              <input id="password" type="password" required placeholder="请输入密码" />
+            </div>
+            <div class="form-actions">
+              <button class="primary" type="submit">登录</button>
+              <a href="register.html"><button type="button">去注册</button></a>
+            </div>
+          </form>
+        </section>
+        <section class="card">
+          <h2>接入说明</h2>
+          <div class="muted">这个仓库没有现成前端，所以这里直接给你一个最简单可跑的页面骨架。建议先放到 <code>src/main/resources/static/ui</code> 里，然后通过 Spring Boot 同源访问。</div>
+          <ul>
+            <li>默认接口根路径：<code>http://localhost:8010/book-service</code></li>
+            <li>登录成功后跳转首页</li>
+            <li>顶部导航会显示当前缓存用户</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/login.js"></script>
+</body>
+</html>

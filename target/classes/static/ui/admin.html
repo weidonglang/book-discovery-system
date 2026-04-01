@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="admin">
+  <div class="app-shell">
+    <main class="page">
+      <div id="admin-message" class="alert hidden"></div>
+      <section class="page-header">
+        <div>
+          <h1 class="page-title">Admin Console</h1>
+          <p class="page-subtitle">Manage books, authors, publishers, and tags with admin-only actions.</p>
+        </div>
+      </section>
+
+      <section class="admin-grid">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Book Editor</h2>
+              <p class="muted">Create or update catalog records.</p>
+            </div>
+            <button id="reset-book-form" type="button">New Book</button>
+          </div>
+          <form id="book-form" class="form-grid">
+            <input id="book-id" type="hidden" />
+            <div class="field">
+              <label class="label" for="book-name">Name</label>
+              <input id="book-name" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-author">Author</label>
+              <select id="book-author" required></select>
+            </div>
+            <div class="field">
+              <label class="label" for="book-category">Category</label>
+              <select id="book-category" required></select>
+            </div>
+            <div class="field">
+              <label class="label" for="book-publisher">Publisher</label>
+              <select id="book-publisher">
+                <option value="">No Publisher</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label class="label" for="book-tags">Tags</label>
+              <select id="book-tags" multiple size="6"></select>
+            </div>
+            <div class="field">
+              <label class="label" for="book-price">Price</label>
+              <input id="book-price" type="number" step="0.01" min="0" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-rate">Rate</label>
+              <input id="book-rate" type="number" step="0.1" min="0" max="5" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-users-rate-count">Users Rate Count</label>
+              <input id="book-users-rate-count" type="number" min="0" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-pages">Pages</label>
+              <input id="book-pages" type="number" min="1" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-duration">Reading Duration</label>
+              <input id="book-duration" type="number" min="1" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-publish-date">Publish Date</label>
+              <input id="book-publish-date" type="date" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-image-url">Image URL</label>
+              <input id="book-image-url" type="url" required />
+            </div>
+            <div class="field full">
+              <label class="label" for="book-description">Description</label>
+              <textarea id="book-description" required></textarea>
+            </div>
+            <div class="form-actions field full">
+              <button class="primary" type="submit">Save Book</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Author Editor</h2>
+              <p class="muted">Maintain the author catalog.</p>
+            </div>
+            <button id="reset-author-form" type="button">New Author</button>
+          </div>
+          <form id="author-form" class="form-grid">
+            <input id="author-id" type="hidden" />
+            <div class="field">
+              <label class="label" for="author-name">Name</label>
+              <input id="author-name" required />
+            </div>
+            <div class="field">
+              <label class="label" for="author-country">Country</label>
+              <input id="author-country" required />
+            </div>
+            <div class="field">
+              <label class="label" for="author-birthdate">Birthdate</label>
+              <input id="author-birthdate" type="date" required />
+            </div>
+            <div class="field">
+              <label class="label" for="author-deathdate">Deathdate</label>
+              <input id="author-deathdate" type="date" />
+            </div>
+            <div class="field">
+              <label class="label" for="author-age">Age</label>
+              <input id="author-age" type="number" min="0" required />
+            </div>
+            <div class="field">
+              <label class="label" for="author-gender">Gender</label>
+              <select id="author-gender" required>
+                <option value="MALE">MALE</option>
+                <option value="FEMALE">FEMALE</option>
+                <option value="OTHERS">OTHERS</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label class="label" for="author-image-url">Image URL</label>
+              <input id="author-image-url" type="url" required />
+            </div>
+            <div class="field full">
+              <label class="label" for="author-description">Description</label>
+              <textarea id="author-description" required></textarea>
+            </div>
+            <div class="form-actions field full">
+              <button class="primary" type="submit">Save Author</button>
+            </div>
+          </form>
+        </article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Publisher Editor</h2>
+              <p class="muted">Maintain the publisher catalog.</p>
+            </div>
+            <button id="reset-publisher-form" type="button">New Publisher</button>
+          </div>
+          <form id="publisher-form" class="form-grid">
+            <input id="publisher-id" type="hidden" />
+            <div class="field">
+              <label class="label" for="publisher-name">Name</label>
+              <input id="publisher-name" required />
+            </div>
+            <div class="field">
+              <label class="label" for="publisher-country">Country</label>
+              <input id="publisher-country" />
+            </div>
+            <div class="field full">
+              <label class="label" for="publisher-website">Website</label>
+              <input id="publisher-website" type="url" />
+            </div>
+            <div class="field full">
+              <label class="label" for="publisher-description">Description</label>
+              <textarea id="publisher-description"></textarea>
+            </div>
+            <div class="form-actions field full">
+              <button class="primary" type="submit">Save Publisher</button>
+            </div>
+          </form>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Tag Editor</h2>
+              <p class="muted">Maintain reusable book tags.</p>
+            </div>
+            <button id="reset-tag-form" type="button">New Tag</button>
+          </div>
+          <form id="tag-form" class="form-grid">
+            <input id="tag-id" type="hidden" />
+            <div class="field">
+              <label class="label" for="tag-name">Name</label>
+              <input id="tag-name" required />
+            </div>
+            <div class="field full">
+              <label class="label" for="tag-description">Description</label>
+              <textarea id="tag-description"></textarea>
+            </div>
+            <div class="form-actions field full">
+              <button class="primary" type="submit">Save Tag</button>
+            </div>
+          </form>
+        </article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Books</h2>
+              <p class="muted">Active books only. Delete performs a soft delete.</p>
+            </div>
+            <button id="reload-books" type="button">Reload</button>
+          </div>
+          <div id="book-admin-list" class="admin-list"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Authors</h2>
+              <p class="muted">Active authors only. Delete performs a soft delete.</p>
+            </div>
+            <button id="reload-authors" type="button">Reload</button>
+          </div>
+          <div id="author-admin-list" class="admin-list"></div>
+        </article>
+      </section>
+
+      <section class="admin-grid">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Publishers</h2>
+              <p class="muted">Delete is blocked while active books still reference a publisher.</p>
+            </div>
+            <button id="reload-publishers" type="button">Reload</button>
+          </div>
+          <div id="publisher-admin-list" class="admin-list"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Tags</h2>
+              <p class="muted">Delete is blocked while active books still reference a tag.</p>
+            </div>
+            <button id="reload-tags" type="button">Reload</button>
+          </div>
+          <div id="tag-admin-list" class="admin-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>

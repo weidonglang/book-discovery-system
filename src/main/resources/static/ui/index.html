@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>首页 - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="home">
+  <div class="app-shell">
+    <main class="page">
+      <div id="home-message" class="alert hidden"></div>
+      <section class="hero">
+        <article class="card">
+          <h1 class="hero-title">3. 首页</h1>
+          <p class="hero-copy">这一页承担“基础版项目门面”的作用：顶部搜索、分类概览、推荐预览都先摆出来，后面再自然升级成你的混合检索和解释推荐首页。</p>
+          <form id="quick-search-form" class="inline-search">
+            <input id="quick-keyword" placeholder="例如：心理学入门、三体、科幻、悬疑" />
+            <button class="primary" type="submit">搜书</button>
+          </form>
+        </article>
+        <article class="card">
+          <h2>当前接入能力</h2>
+          <div class="stats">
+            <div class="stat"><div class="stat-label">登录</div><div class="stat-value">已接</div></div>
+            <div class="stat"><div class="stat-label">分页筛选</div><div class="stat-value">已接</div></div>
+            <div class="stat"><div class="stat-label">详情</div><div class="stat-value">已接</div></div>
+            <div class="stat"><div class="stat-label">评分</div><div class="stat-value">已接</div></div>
+          </div>
+        </article>
+      </section>
+      <section class="card">
+        <h2>图书分类</h2>
+        <div id="category-list" class="tags"></div>
+      </section>
+      <section>
+        <div class="page-header">
+          <div>
+            <h2 class="page-title" style="font-size:24px;">推荐预览</h2>
+            <p class="page-subtitle">这里先直接对接仓库现有的推荐接口。</p>
+          </div>
+          <a href="recommendations.html"><button>查看全部推荐</button></a>
+        </div>
+        <div id="recommend-list" class="book-list"></div>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/index.js"></script>
+</body>
+</html>

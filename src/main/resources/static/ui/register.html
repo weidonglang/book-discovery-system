@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>注册 - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="register">
+  <div class="app-shell">
+    <main class="page">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">2. 注册页</h1>
+          <p class="page-subtitle">对接用户创建接口，字段按 UserDto 骨架组织。</p>
+        </div>
+      </div>
+      <section class="card">
+        <div id="register-message" class="alert hidden"></div>
+        <form id="register-form" class="form-grid">
+          <div class="field">
+            <label class="label">名</label>
+            <input id="firstName" required />
+          </div>
+          <div class="field">
+            <label class="label">姓</label>
+            <input id="lastName" required />
+          </div>
+          <div class="field">
+            <label class="label">邮箱</label>
+            <input id="email" type="email" required />
+          </div>
+          <div class="field">
+            <label class="label">密码</label>
+            <input id="password" type="password" required />
+          </div>
+          <div class="field">
+            <label class="label">手机号</label>
+            <input id="phoneNumber" />
+          </div>
+          <div class="field">
+            <label class="label">出生日期</label>
+            <input id="birthdate" type="date" />
+          </div>
+          <div class="field">
+            <label class="label">国家</label>
+            <input id="country" />
+          </div>
+          <div class="field">
+            <label class="label">年龄</label>
+            <input id="age" type="number" min="0" />
+          </div>
+          <div class="field">
+            <label class="label">性别</label>
+            <select id="gender"><option value="">请选择</option></select>
+          </div>
+          <div class="field">
+            <label class="label">婚姻状态</label>
+            <select id="maritalStatus"><option value="">请选择</option></select>
+          </div>
+          <div class="field full">
+            <label class="label">头像地址</label>
+            <input id="imageUrl" placeholder="可选" />
+          </div>
+          <div class="field full">
+            <div class="form-actions">
+              <button class="primary" type="submit">提交注册</button>
+              <a href="login.html"><button type="button">返回登录</button></a>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/register.js"></script>
+</body>
+</html>

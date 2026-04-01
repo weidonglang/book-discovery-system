@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>个人中心 - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="profile">
+  <div class="app-shell">
+    <main class="page">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">8. 个人中心页</h1>
+          <p class="page-subtitle">对接 current user、update user、reading-info 查询与提交。</p>
+        </div>
+      </div>
+      <div id="profile-message" class="alert hidden"></div>
+      <section class="grid two">
+        <article class="card">
+          <h2>当前账号概览</h2>
+          <div class="info-list">
+            <div class="info-item"><div class="info-key">用户 ID</div><div id="profile-id" class="info-value">—</div></div>
+            <div class="info-item"><div class="info-key">邮箱</div><div id="profile-email-view" class="info-value">—</div></div>
+          </div>
+          <form id="profile-form" class="form-grid" style="margin-top:16px;">
+            <input id="profile-id-input" type="hidden" />
+            <div class="field"><label class="label">名</label><input id="firstName" /></div>
+            <div class="field"><label class="label">姓</label><input id="lastName" /></div>
+            <div class="field"><label class="label">邮箱</label><input id="email" type="email" /></div>
+            <div class="field"><label class="label">密码（可留空）</label><input id="password" type="password" /></div>
+            <div class="field"><label class="label">手机号</label><input id="phoneNumber" /></div>
+            <div class="field"><label class="label">出生日期</label><input id="birthdate" type="date" /></div>
+            <div class="field"><label class="label">国家</label><input id="country" /></div>
+            <div class="field"><label class="label">年龄</label><input id="age" type="number" /></div>
+            <div class="field"><label class="label">性别</label><select id="gender"><option value="">请选择</option><option value="MALE">MALE</option><option value="FEMALE">FEMALE</option><option value="OTHERS">OTHERS</option></select></div>
+            <div class="field"><label class="label">婚姻状态</label><select id="maritalStatus"><option value="">请选择</option><option value="SINGLE">SINGLE</option><option value="MARRIED">MARRIED</option><option value="IN_RELATIONSHIP">IN_RELATIONSHIP</option></select></div>
+            <div class="field full"><label class="label">头像地址</label><input id="imageUrl" /></div>
+            <div class="field full"><div class="form-actions"><button class="primary" type="submit">保存个人资料</button></div></div>
+          </form>
+        </article>
+        <article class="card">
+          <h2>阅读偏好</h2>
+          <div id="reading-message" class="alert hidden"></div>
+          <form id="reading-form" class="form-grid">
+            <input id="reading-user-id" type="hidden" />
+            <div class="field"><label class="label">阅读等级</label><select id="readingLevel"><option value="BEGINNER">BEGINNER</option><option value="INTERMEDIATE">INTERMEDIATE</option><option value="EXPERT">EXPERT</option></select></div>
+            <div class="field full"><label class="label">偏好分类 ID 列表</label><input id="categoryIds" placeholder="例如：1,2,5" /></div>
+            <div class="field full"><div class="form-actions"><button class="primary" type="submit">保存阅读偏好</button></div></div>
+          </form>
+          <div class="alert info" style="margin-top:16px;">这里先用最简单的分类 ID 文本输入，后面你可以改造成真正的分类多选组件。</div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/profile.js"></script>
+</body>
+</html>

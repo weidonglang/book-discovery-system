@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图书评分 - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="books">
+  <div class="app-shell">
+    <main class="page">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">6. 评分页</h1>
+          <p class="page-subtitle">对接 /api/book/rate。当前按 UserBookRateDto 结构提交：user + book + rate + comment。</p>
+        </div>
+      </div>
+      <section class="card">
+        <div id="rate-message" class="alert hidden"></div>
+        <h2 id="rate-book-name">加载中...</h2>
+        <p id="rate-book-summary" class="muted"></p>
+        <form id="rate-form" class="form-grid">
+          <div class="field">
+            <label class="label">评分（1-5）</label>
+            <select id="rate" required>
+              <option value="5">5</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label class="label">评论</label>
+            <textarea id="comment" placeholder="可以先简单写几句，后续再扩展成评论列表"></textarea>
+          </div>
+          <div class="field full">
+            <div class="form-actions">
+              <button class="primary" type="submit">提交评分</button>
+              <a href="books.html"><button type="button">返回列表</button></a>
+            </div>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/rate-book.js"></script>
+</body>
+</html>

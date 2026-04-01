@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Detail - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="books">
+  <div class="app-shell">
+    <main class="page">
+      <div id="detail-message" class="alert hidden"></div>
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Book Detail</h1>
+          <p class="page-subtitle">View the full record for a book, including publisher and tags.</p>
+        </div>
+        <div class="form-actions">
+          <a id="go-rate" href="rate-book.html"><button class="primary" type="button">Rate This Book</button></a>
+          <a href="books.html"><button type="button">Back to Books</button></a>
+        </div>
+      </div>
+      <section class="detail-layout">
+        <article class="card">
+          <div id="detail-cover" class="detail-cover"></div>
+        </article>
+        <article class="card">
+          <h2 id="detail-title">Loading...</h2>
+          <p id="detail-desc" class="hero-copy"></p>
+          <div id="detail-meta" class="info-list"></div>
+        </article>
+      </section>
+      <section style="margin-top:20px;">
+        <div class="page-header">
+          <div>
+            <h2 class="page-title" style="font-size:24px;">More From This Author</h2>
+            <p class="page-subtitle">This section is a good place to expand into same-author or similar-book recommendations later.</p>
+          </div>
+        </div>
+        <div id="author-books" class="book-list"></div>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/book-detail.js"></script>
+</body>
+</html>

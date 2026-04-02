@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const borrowButton = document.getElementById('borrow-book-btn');
   const reserveButton = document.getElementById('reserve-book-btn');
   const cancelReservationButton = document.getElementById('cancel-reservation-btn');
+  const similarBooksWrap = document.getElementById('similar-books');
 
   if (!id) {
     BookUi.showMessage('detail-message', 'error', 'Missing book id.');
@@ -171,6 +172,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
+    const similarRes = await BookApi.apiRequest(`/api/book/recommendations/similar/${id}`);
+    similarBooksWrap.innerHTML = BookUi.renderRecommendationShelves(similarRes?.body, {
+      emptyMessage: 'No related recommendations were found for this book.'
+    });
+
     if (state.book.author?.id) {
       const authorRes = await BookApi.apiRequest(`/api/book/find-all-by-author-id/${state.book.author.id}`);
       const authorBooks = Array.isArray(authorRes?.body) ? authorRes.body : [];
@@ -178,6 +184,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('author-books').innerHTML = relatedBooks.length
         ? relatedBooks.map(item => BookUi.renderBookCard(item)).join('')
         : '<div class="card muted">No more books from this author.</div>';
+    } else {
+      document.getElementById('author-books').innerHTML = '<div class="card muted">No author shelf is available for this book.</div>';
     }
   } catch (error) {
     BookUi.showMessage('detail-message', 'error', error.message);

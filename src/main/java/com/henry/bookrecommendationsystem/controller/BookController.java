@@ -3,6 +3,7 @@ package com.henry.bookrecommendationsystem.controller;
 import com.henry.bookrecommendationsystem.controller.base.BaseController;
 import com.henry.bookrecommendationsystem.dto.BookDto;
 import com.henry.bookrecommendationsystem.dto.BookFilterPaginationRequest;
+import com.henry.bookrecommendationsystem.dto.BookRecommendationOverviewDto;
 import com.henry.bookrecommendationsystem.dto.UserBookRateDto;
 import com.henry.bookrecommendationsystem.dto.base.pagination.FilterPaginationRequest;
 import com.henry.bookrecommendationsystem.dto.base.response.ApiResponse;
@@ -48,6 +49,29 @@ public class BookController implements BaseController<BookService> {
         log.info("BookController: getBookCategories() called");
         return new ApiResponse(true, LocalDateTime.now().toString(),
                 "Books recommended fetched successfully.", getService().findAllRecommendedBooks());
+    }
+
+    @GetMapping("/recommendations/popular")
+    public ApiResponse findPopularBooks(@RequestParam(defaultValue = "8") Integer limit) {
+        log.info("BookController: findPopularBooks() called");
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Popular books fetched successfully.", getService().findPopularBooks(limit));
+    }
+
+    @GetMapping("/recommendations/overview")
+    public ApiResponse findRecommendationOverview() {
+        log.info("BookController: findRecommendationOverview() called");
+        BookRecommendationOverviewDto overview = getService().findRecommendationOverview();
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Recommendation overview fetched successfully.", overview);
+    }
+
+    @GetMapping("/recommendations/similar/{bookId}")
+    public ApiResponse findSimilarBookRecommendations(@PathVariable Long bookId) {
+        log.info("BookController: findSimilarBookRecommendations() called");
+        BookRecommendationOverviewDto overview = getService().findBookSimilarityRecommendations(bookId);
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Similar book recommendations fetched successfully.", overview);
     }
 
     @GetMapping("/find-all-by-author-id/{authorId}")

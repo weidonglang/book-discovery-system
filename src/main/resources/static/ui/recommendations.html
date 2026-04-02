@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>推荐页 - Book Nook</title>
+  <title>Recommendations - Book Nook</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body data-page="recommendations">
@@ -11,17 +11,17 @@
     <main class="page">
       <div class="page-header">
         <div>
-          <h1 class="page-title">7. 推荐页</h1>
-          <p class="page-subtitle">仓库当前只有一个推荐结果接口，所以这里先把“推荐结果页骨架”做起来，后续再加推荐理由绑定。</p>
+          <h1 class="page-title">Recommendations</h1>
+          <p class="page-subtitle">This page keeps the logic intentionally simple and inspectable: popularity, reading preferences, and user-activity signals.</p>
         </div>
       </div>
       <section class="card">
-        <h2>推荐说明</h2>
-        <p class="muted">当前用户：<span id="recommend-user">未登录游客</span></p>
-        <p class="muted">后续可扩展：内容相似推荐、协同过滤来源、热门兜底来源、解释绑定字段。</p>
+        <h2>Recommendation Notes</h2>
+        <p class="muted">Current user: <span id="recommend-user">Loading...</span></p>
+        <p class="muted">No collaborative filtering or complex model is used here. These shelves are based on explicit rules so they are easy to explain and debug.</p>
       </section>
       <section style="margin-top:20px;">
-        <div id="recommend-result" class="book-list"></div>
+        <div id="recommend-result" class="recommend-stack"></div>
       </section>
     </main>
   </div>

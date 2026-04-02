@@ -154,6 +154,27 @@
       </article>`;
   }
 
+  function renderRecommendationShelves(overview, options = {}) {
+    const shelves = Array.isArray(overview?.shelves) ? overview.shelves : [];
+    const emptyMessage = options.emptyMessage || 'No recommendation data available yet.';
+    if (!shelves.length) {
+      return `<div class="card muted">${escapeHtml(emptyMessage)}</div>`;
+    }
+
+    return shelves.map(shelf => `
+      <section class="recommend-shelf">
+        <div class="section-head">
+          <div>
+            <h2>${escapeHtml(shelf.title || 'Recommended')}</h2>
+            <div class="muted">${escapeHtml(shelf.description || '')}</div>
+          </div>
+        </div>
+        <div class="book-list">
+          ${(Array.isArray(shelf.books) ? shelf.books : []).map(book => renderBookCard(book)).join('')}
+        </div>
+      </section>`).join('');
+  }
+
   function requireLogin(redirect = 'login.html') {
     const token = window.BookApi.getAccessToken();
     if (!token) {
@@ -190,6 +211,7 @@
     handleBookImageError,
     renderBookImage,
     renderBookCard,
+    renderRecommendationShelves,
     requireLogin,
     requireAdmin,
     redirectIfLoggedIn

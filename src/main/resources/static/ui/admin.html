@@ -34,21 +34,37 @@
             </div>
             <div class="field">
               <label class="label" for="book-author">Author</label>
-              <select id="book-author" required></select>
+              <div class="select-stack">
+                <input id="book-author-search" type="search" placeholder="Search author name" />
+                <select id="book-author" size="7" required></select>
+                <div class="picker-help">Search by name, then select a single author.</div>
+              </div>
             </div>
             <div class="field">
               <label class="label" for="book-category">Category</label>
-              <select id="book-category" required></select>
+              <div class="select-stack">
+                <input id="book-category-search" type="search" placeholder="Search category name" />
+                <select id="book-category" size="7" required></select>
+                <div class="picker-help">Useful when category candidates become large.</div>
+              </div>
             </div>
             <div class="field">
               <label class="label" for="book-publisher">Publisher</label>
-              <select id="book-publisher">
-                <option value="">No Publisher</option>
-              </select>
+              <div class="select-stack">
+                <input id="book-publisher-search" type="search" placeholder="Search publisher name" />
+                <select id="book-publisher" size="7">
+                  <option value="">No Publisher</option>
+                </select>
+                <div class="picker-help">Leave the selection on "No Publisher" when not needed.</div>
+              </div>
             </div>
             <div class="field full">
               <label class="label" for="book-tags">Tags</label>
-              <select id="book-tags" multiple size="6"></select>
+              <div class="select-stack">
+                <input id="book-tag-search" type="search" placeholder="Search tag name" />
+                <select id="book-tags" multiple size="8"></select>
+                <div id="book-tag-summary" class="tags"></div>
+              </div>
             </div>
             <div class="field">
               <label class="label" for="book-price">Price</label>

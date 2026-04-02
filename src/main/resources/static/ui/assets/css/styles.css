@@ -329,6 +329,22 @@ textarea { min-height: 120px; resize: vertical; }
 .section-head h2 {
   margin-bottom: 6px;
 }
+.recommend-stack {
+  display: grid;
+  gap: 22px;
+}
+.recommend-shelf {
+  display: grid;
+  gap: 14px;
+}
+.picker-help {
+  font-size: 12px;
+  color: var(--muted);
+}
+.select-stack {
+  display: grid;
+  gap: 8px;
+}
 .admin-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

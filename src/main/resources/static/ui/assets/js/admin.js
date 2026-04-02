@@ -3,7 +3,7 @@ function buildBookAdminPayload(pageNumber = 1) {
     pageNumber,
     pageSize: 200,
     sortingByList: [{ fieldName: 'id', direction: 'ASC', isNumber: true }],
-    criteria: { name: null, categories: [] },
+    criteria: null,
     deletedRecords: false
   };
 }
@@ -52,6 +52,13 @@ function setSelectedIds(select, ids) {
   });
 }
 
+function filterItemsByQuery(items, query, selectedIds = []) {
+  const normalizedQuery = String(query || '').trim().toLowerCase();
+  const selected = new Set((selectedIds || []).map(value => String(value)));
+  if (!normalizedQuery) return items;
+  return items.filter(item => selected.has(String(item.id)) || String(item.name || '').toLowerCase().includes(normalizedQuery));
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   if (!BookUi.requireLogin()) return;
   BookUi.injectLayout();
@@ -89,6 +96,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   const tagList = document.getElementById('tag-admin-list');
   const totalCopiesInput = document.getElementById('book-total-copies');
   const availableCopiesInput = document.getElementById('book-available-copies');
+  const authorSelect = document.getElementById('book-author');
+  const categorySelect = document.getElementById('book-category');
+  const publisherSelect = document.getElementById('book-publisher');
+  const tagSelect = document.getElementById('book-tags');
+  const authorSearchInput = document.getElementById('book-author-search');
+  const categorySearchInput = document.getElementById('book-category-search');
+  const publisherSearchInput = document.getElementById('book-publisher-search');
+  const tagSearchInput = document.getElementById('book-tag-search');
+  const tagSummary = document.getElementById('book-tag-summary');
 
   function syncAvailableCopiesPreview() {
     const totalCopies = Math.max(1, Number(totalCopiesInput.value || 1));
@@ -97,46 +113,74 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   function renderAuthorOptions() {
-    const select = document.getElementById('book-author');
-    select.innerHTML = authors.map(author => (
+    const selectedId = authorSelect.value;
+    const filteredAuthors = filterItemsByQuery(authors, authorSearchInput.value, selectedId ? [selectedId] : []);
+    authorSelect.innerHTML = filteredAuthors.map(author => (
       `<option value="${author.id}">${escapeHtml(author.name)}</option>`
     )).join('');
+    if (selectedId && filteredAuthors.some(author => String(author.id) === String(selectedId))) {
+      authorSelect.value = String(selectedId);
+    } else if (filteredAuthors.length) {
+      authorSelect.value = String(filteredAuthors[0].id);
+    }
   }
 
   function renderCategoryOptions() {
-    const select = document.getElementById('book-category');
-    select.innerHTML = categories.map(category => (
+    const selectedId = categorySelect.value;
+    const filteredCategories = filterItemsByQuery(categories, categorySearchInput.value, selectedId ? [selectedId] : []);
+    categorySelect.innerHTML = filteredCategories.map(category => (
       `<option value="${category.id}">${escapeHtml(category.name)}</option>`
     )).join('');
+    if (selectedId && filteredCategories.some(category => String(category.id) === String(selectedId))) {
+      categorySelect.value = String(selectedId);
+    } else if (filteredCategories.length) {
+      categorySelect.value = String(filteredCategories[0].id);
+    }
   }
 
   function renderPublisherOptions() {
-    const select = document.getElementById('book-publisher');
-    const options = publishers.map(publisher => (
+    const selectedId = publisherSelect.value;
+    const filteredPublishers = filterItemsByQuery(publishers, publisherSearchInput.value, selectedId ? [selectedId] : []);
+    const options = filteredPublishers.map(publisher => (
       `<option value="${publisher.id}">${escapeHtml(publisher.name)}</option>`
     )).join('');
-    select.innerHTML = `<option value="">No Publisher</option>${options}`;
+    publisherSelect.innerHTML = `<option value="">No Publisher</option>${options}`;
+    publisherSelect.value = selectedId || '';
   }
 
   function renderTagOptions() {
-    const select = document.getElementById('book-tags');
-    select.innerHTML = tags.map(tag => (
+    const selectedIds = getSelectedIds(tagSelect);
+    const filteredTags = filterItemsByQuery(tags, tagSearchInput.value, selectedIds);
+    tagSelect.innerHTML = filteredTags.map(tag => (
       `<option value="${tag.id}">${escapeHtml(tag.name)}</option>`
     )).join('');
+    setSelectedIds(tagSelect, selectedIds);
+    const selectedTags = tags.filter(tag => selectedIds.includes(tag.id));
+    tagSummary.innerHTML = selectedTags.length
+      ? selectedTags.map(tag => `<span class="tag">${escapeHtml(tag.name)}</span>`).join('')
+      : '<span class="muted">No tags selected.</span>';
   }
 
   function resetBookForm() {
     bookForm.reset();
     document.getElementById('book-id').value = '';
-    if (authors.length) document.getElementById('book-author').value = String(authors[0].id);
-    if (categories.length) document.getElementById('book-category').value = String(categories[0].id);
-    document.getElementById('book-publisher').value = '';
-    setSelectedIds(document.getElementById('book-tags'), []);
+    authorSearchInput.value = '';
+    categorySearchInput.value = '';
+    publisherSearchInput.value = '';
+    tagSearchInput.value = '';
+    if (authors.length) authorSelect.value = String(authors[0].id);
+    if (categories.length) categorySelect.value = String(categories[0].id);
+    publisherSelect.value = '';
+    setSelectedIds(tagSelect, []);
     document.getElementById('book-rate').value = '0';
     document.getElementById('book-users-rate-count').value = '0';
     document.getElementById('book-total-copies').value = '1';
     document.getElementById('book-available-copies').value = '1';
     totalCopiesInput.dataset.borrowedCount = '0';
+    renderAuthorOptions();
+    renderCategoryOptions();
+    renderPublisherOptions();
+    renderTagOptions();
   }
 
   function resetAuthorForm() {
@@ -160,10 +204,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!book) return;
     document.getElementById('book-id').value = book.id;
     document.getElementById('book-name').value = book.name || '';
-    document.getElementById('book-author').value = book.author?.id ? String(book.author.id) : '';
-    document.getElementById('book-category').value = book.category?.id ? String(book.category.id) : '';
-    document.getElementById('book-publisher').value = book.publisher?.id ? String(book.publisher.id) : '';
-    setSelectedIds(document.getElementById('book-tags'), (book.tags || []).map(tag => tag.id));
+    authorSearchInput.value = '';
+    categorySearchInput.value = '';
+    publisherSearchInput.value = '';
+    tagSearchInput.value = '';
+    renderAuthorOptions();
+    renderCategoryOptions();
+    renderPublisherOptions();
+    renderTagOptions();
+    authorSelect.value = book.author?.id ? String(book.author.id) : '';
+    categorySelect.value = book.category?.id ? String(book.category.id) : '';
+    publisherSelect.value = book.publisher?.id ? String(book.publisher.id) : '';
+    setSelectedIds(tagSelect, (book.tags || []).map(tag => tag.id));
+    renderTagOptions();
     document.getElementById('book-price').value = book.price ?? 0;
     document.getElementById('book-rate').value = book.rate ?? 0;
     document.getElementById('book-users-rate-count').value = book.usersRateCount ?? 0;
@@ -436,10 +489,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     const payload = {
       id: bookId ? Number(bookId) : null,
       name: document.getElementById('book-name').value.trim(),
-      author: { id: Number(document.getElementById('book-author').value) },
-      category: { id: Number(document.getElementById('book-category').value) },
+      author: { id: Number(authorSelect.value) },
+      category: { id: Number(categorySelect.value) },
       publisher: publisherId ? { id: Number(publisherId) } : null,
-      tags: getSelectedIds(document.getElementById('book-tags')).map(id => ({ id })),
+      tags: getSelectedIds(tagSelect).map(id => ({ id })),
       price: Number(document.getElementById('book-price').value),
       rate: Number(document.getElementById('book-rate').value),
       usersRateCount: Number(document.getElementById('book-users-rate-count').value),
@@ -543,6 +596,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   document.getElementById('reset-book-form').addEventListener('click', resetBookForm);
   totalCopiesInput.addEventListener('input', syncAvailableCopiesPreview);
+  authorSearchInput.addEventListener('input', renderAuthorOptions);
+  categorySearchInput.addEventListener('input', renderCategoryOptions);
+  publisherSearchInput.addEventListener('input', renderPublisherOptions);
+  tagSearchInput.addEventListener('input', renderTagOptions);
+  tagSelect.addEventListener('change', renderTagOptions);
   document.getElementById('reset-author-form').addEventListener('click', resetAuthorForm);
   document.getElementById('reset-publisher-form').addEventListener('click', resetPublisherForm);
   document.getElementById('reset-tag-form').addEventListener('click', resetTagForm);

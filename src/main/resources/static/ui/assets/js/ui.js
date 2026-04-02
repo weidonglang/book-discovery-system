@@ -12,6 +12,7 @@
     const protectedLinks = user ? `
             <a data-nav="home" href="index.html">Home</a>
             <a data-nav="books" href="books.html">Books</a>
+            <a data-nav="borrowings" href="borrowings.html">Loans</a>
             <a data-nav="recommendations" href="recommendations.html">Recommendations</a>
             <a data-nav="profile" href="profile.html">Profile</a>
             ${isAdmin ? '<a data-nav="admin" href="admin.html">Admin</a>' : ''}` : '';
@@ -125,6 +126,8 @@
     const authorId = book?.author?.id ?? '';
     const categoryName = book?.category?.name || 'Unknown';
     const rate = book?.rate ?? '-';
+    const totalCopies = book?.totalCopies ?? '-';
+    const availableCopies = book?.availableCopies ?? '-';
     const description = book?.description || 'No description.';
     const comment = options.comment ? `<div class="muted">${options.comment}</div>` : '';
 
@@ -139,6 +142,7 @@
           <span class="tag">Category: ${categoryName}</span>
           <span class="tag">Rate: ${rate}</span>
           <span class="tag">Pages: ${book?.pagesNumber ?? '-'}</span>
+          <span class="tag">Available: ${availableCopies}/${totalCopies}</span>
         </div>
         <div class="muted">${description.slice(0, 100)}${description.length > 100 ? '...' : ''}</div>
         ${comment}

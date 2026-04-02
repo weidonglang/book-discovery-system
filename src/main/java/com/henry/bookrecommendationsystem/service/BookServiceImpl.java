@@ -1,6 +1,7 @@
 package com.henry.bookrecommendationsystem.service;
 
 import com.henry.bookrecommendationsystem.dao.BookDao;
+import com.henry.bookrecommendationsystem.dao.BookLoanDao;
 import com.henry.bookrecommendationsystem.dto.BookDto;
 import com.henry.bookrecommendationsystem.dto.BookFilterPaginationRequest;
 import com.henry.bookrecommendationsystem.dto.TagDto;
@@ -35,9 +36,10 @@ public class BookServiceImpl implements BookService {
     private final PublisherService publisherService;
     private final TagService tagService;
     private final UserReadingInfoService userReadingInfoService;
+    private final BookLoanDao bookLoanDao;
 
     @Autowired
-    public BookServiceImpl(BookTransformer bookTransformer, BookDao bookDao, AuthorService authorService, BookCategoryService bookCategoryService, PublisherService publisherService, TagService tagService, UserReadingInfoService userReadingInfoService) {
+    public BookServiceImpl(BookTransformer bookTransformer, BookDao bookDao, AuthorService authorService, BookCategoryService bookCategoryService, PublisherService publisherService, TagService tagService, UserReadingInfoService userReadingInfoService, BookLoanDao bookLoanDao) {
         this.bookTransformer = bookTransformer;
         this.bookDao = bookDao;
         this.bookCategoryService = bookCategoryService;
@@ -45,10 +47,11 @@ public class BookServiceImpl implements BookService {
         this.tagService = tagService;
         this.userReadingInfoService = userReadingInfoService;
         this.authorService = authorService;
+        this.bookLoanDao = bookLoanDao;
     }
 
     public BookServiceImpl(BookTransformer bookTransformer, BookDao bookDao, AuthorService authorService, UserReadingInfoService userReadingInfoService) {
-        this(bookTransformer, bookDao, authorService, null, null, null, userReadingInfoService);
+        this(bookTransformer, bookDao, authorService, null, null, null, userReadingInfoService, null);
     }
 
     @Override
@@ -65,6 +68,7 @@ public class BookServiceImpl implements BookService {
     public BookDto create(BookDto dto) {
         log.info("BookService: create() called");
         normalizeBookRelations(dto);
+        normalizeInventoryForCreate(dto);
         return getTransformer().transformEntityToDto(getDao().create(getTransformer().transformDtoToEntity(dto)));
     }
 
@@ -76,6 +80,7 @@ public class BookServiceImpl implements BookService {
             throw new EntityExistsException("Book not found for id: " + id);
 
         normalizeBookRelations(dto);
+        normalizeInventoryForUpdate(dto, book.get());
         getTransformer().updateEntity(dto, book.get());
         return getTransformer().transformEntityToDto(getDao().update(book.get()));
     }
@@ -111,6 +116,30 @@ public class BookServiceImpl implements BookService {
                     .collect(Collectors.toCollection(LinkedHashSet::new));
             dto.setTags(normalizedTags);
         }
+    }
+
+    private void normalizeInventoryForCreate(BookDto dto) {
+        Integer totalCopies = dto.getTotalCopies() == null ? 1 : dto.getTotalCopies();
+        if (totalCopies < 1) {
+            throw new EntityExistsException("Total copies must be at least 1.");
+        }
+        dto.setTotalCopies(totalCopies);
+        dto.setAvailableCopies(totalCopies);
+    }
+
+    private void normalizeInventoryForUpdate(BookDto dto, Book existingBook) {
+        Integer totalCopies = dto.getTotalCopies() == null ? existingBook.getTotalCopies() : dto.getTotalCopies();
+        if (totalCopies < 1) {
+            throw new EntityExistsException("Total copies must be at least 1.");
+        }
+        long activeLoans = bookLoanDao == null
+                ? Math.max(0, existingBook.getTotalCopies() - existingBook.getAvailableCopies())
+                : bookLoanDao.countActiveLoansByBookId(existingBook.getId());
+        if (totalCopies < activeLoans) {
+            throw new EntityExistsException("Total copies cannot be lower than active borrowed copies.");
+        }
+        dto.setTotalCopies(totalCopies);
+        dto.setAvailableCopies((int) (totalCopies - activeLoans));
     }
 
     @Override

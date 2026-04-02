@@ -78,6 +78,14 @@
               <label class="label" for="book-image-url">Image URL</label>
               <input id="book-image-url" type="url" required />
             </div>
+            <div class="field">
+              <label class="label" for="book-total-copies">Total Copies</label>
+              <input id="book-total-copies" type="number" min="1" value="1" required />
+            </div>
+            <div class="field">
+              <label class="label" for="book-available-copies">Available Copies</label>
+              <input id="book-available-copies" type="number" min="0" value="1" readonly />
+            </div>
             <div class="field full">
               <label class="label" for="book-description">Description</label>
               <textarea id="book-description" required></textarea>

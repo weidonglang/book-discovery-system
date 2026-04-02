@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-01T15:50:35+0800",
+    date = "2026-04-02T13:11:00+0800",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -45,6 +45,8 @@ public class BookMapperImpl implements BookMapper {
         book.setPublishDate( dto.getPublishDate() );
         book.setDescription( dto.getDescription() );
         book.setImageUrl( dto.getImageUrl() );
+        book.setTotalCopies( dto.getTotalCopies() );
+        book.setAvailableCopies( dto.getAvailableCopies() );
         book.setTags( tagDtoSetToTagSet( dto.getTags() ) );
 
         return book;
@@ -74,6 +76,8 @@ public class BookMapperImpl implements BookMapper {
         bookDto.setPublishDate( entity.getPublishDate() );
         bookDto.setDescription( entity.getDescription() );
         bookDto.setImageUrl( entity.getImageUrl() );
+        bookDto.setTotalCopies( entity.getTotalCopies() );
+        bookDto.setAvailableCopies( entity.getAvailableCopies() );
         bookDto.setTags( tagSetToTagDtoSet( entity.getTags() ) );
 
         return bookDto;
@@ -123,6 +127,8 @@ public class BookMapperImpl implements BookMapper {
         entity.setPublishDate( dto.getPublishDate() );
         entity.setDescription( dto.getDescription() );
         entity.setImageUrl( dto.getImageUrl() );
+        entity.setTotalCopies( dto.getTotalCopies() );
+        entity.setAvailableCopies( dto.getAvailableCopies() );
         if ( entity.getTags() != null ) {
             Set<Tag> set = tagDtoSetToTagSet( dto.getTags() );
             if ( set != null ) {

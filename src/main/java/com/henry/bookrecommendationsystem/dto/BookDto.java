@@ -31,5 +31,7 @@ public class BookDto extends BaseDto {
     private Date publishDate;
     private String description;
     private String imageUrl;
+    private Integer totalCopies;
+    private Integer availableCopies;
     private Set<TagDto> tags;
 }

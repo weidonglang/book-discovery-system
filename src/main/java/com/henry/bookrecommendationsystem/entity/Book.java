@@ -66,6 +66,12 @@ public class Book extends BaseEntity {
     @Column(name = "image_url", nullable = false)
     private String imageUrl;
 
+    @Column(name = "total_copies", nullable = false)
+    private Integer totalCopies;
+
+    @Column(name = "available_copies", nullable = false)
+    private Integer availableCopies;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "book_tag", schema = "public",
             joinColumns = @JoinColumn(name = "book_id"),

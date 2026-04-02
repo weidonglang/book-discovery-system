@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-04-01T15:50:35+0800",
+    date = "2026-04-02T13:11:00+0800",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 11.0.18 (Oracle Corporation)"
 )
 @Component
@@ -222,6 +222,8 @@ public class UserBookRateMapperImpl implements UserBookRateMapper {
         book.setPublishDate( bookDto.getPublishDate() );
         book.setDescription( bookDto.getDescription() );
         book.setImageUrl( bookDto.getImageUrl() );
+        book.setTotalCopies( bookDto.getTotalCopies() );
+        book.setAvailableCopies( bookDto.getAvailableCopies() );
         book.setTags( tagDtoSetToTagSet( bookDto.getTags() ) );
 
         return book;
@@ -354,6 +356,8 @@ public class UserBookRateMapperImpl implements UserBookRateMapper {
         bookDto.setPublishDate( book.getPublishDate() );
         bookDto.setDescription( book.getDescription() );
         bookDto.setImageUrl( book.getImageUrl() );
+        bookDto.setTotalCopies( book.getTotalCopies() );
+        bookDto.setAvailableCopies( book.getAvailableCopies() );
         bookDto.setTags( tagSetToTagDtoSet( book.getTags() ) );
 
         return bookDto;
@@ -464,6 +468,8 @@ public class UserBookRateMapperImpl implements UserBookRateMapper {
         mappingTarget.setPublishDate( bookDto.getPublishDate() );
         mappingTarget.setDescription( bookDto.getDescription() );
         mappingTarget.setImageUrl( bookDto.getImageUrl() );
+        mappingTarget.setTotalCopies( bookDto.getTotalCopies() );
+        mappingTarget.setAvailableCopies( bookDto.getAvailableCopies() );
         if ( mappingTarget.getTags() != null ) {
             Set<Tag> set = tagDtoSetToTagSet( bookDto.getTags() );
             if ( set != null ) {

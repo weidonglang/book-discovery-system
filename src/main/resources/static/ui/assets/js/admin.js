@@ -87,6 +87,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const authorList = document.getElementById('author-admin-list');
   const publisherList = document.getElementById('publisher-admin-list');
   const tagList = document.getElementById('tag-admin-list');
+  const totalCopiesInput = document.getElementById('book-total-copies');
+  const availableCopiesInput = document.getElementById('book-available-copies');
+
+  function syncAvailableCopiesPreview() {
+    const totalCopies = Math.max(1, Number(totalCopiesInput.value || 1));
+    const borrowedCount = Number(totalCopiesInput.dataset.borrowedCount || 0);
+    availableCopiesInput.value = String(Math.max(0, totalCopies - borrowedCount));
+  }
 
   function renderAuthorOptions() {
     const select = document.getElementById('book-author');
@@ -126,6 +134,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     setSelectedIds(document.getElementById('book-tags'), []);
     document.getElementById('book-rate').value = '0';
     document.getElementById('book-users-rate-count').value = '0';
+    document.getElementById('book-total-copies').value = '1';
+    document.getElementById('book-available-copies').value = '1';
+    totalCopiesInput.dataset.borrowedCount = '0';
   }
 
   function resetAuthorForm() {
@@ -160,6 +171,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('book-duration').value = book.readingDuration ?? '';
     document.getElementById('book-publish-date').value = toDateInput(book.publishDate);
     document.getElementById('book-image-url').value = book.imageUrl || '';
+    document.getElementById('book-total-copies').value = book.totalCopies ?? 1;
+    document.getElementById('book-available-copies').value = book.availableCopies ?? 0;
+    totalCopiesInput.dataset.borrowedCount = String(Math.max(0, Number(book.totalCopies ?? 0) - Number(book.availableCopies ?? 0)));
     document.getElementById('book-description').value = book.description || '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -245,6 +259,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               <span class="tag">Price: ${escapeHtml(book.price ?? '-')}</span>
               <span class="tag">Rate: ${escapeHtml(book.rate ?? '-')}</span>
               <span class="tag">Pages: ${escapeHtml(book.pagesNumber ?? '-')}</span>
+              <span class="tag">Available: ${escapeHtml(book.availableCopies ?? '-')} / ${escapeHtml(book.totalCopies ?? '-')}</span>
             </div>
             <div class="tags">${tagLabels || '<span class="muted">No tags assigned.</span>'}</div>
             <div class="muted">${escapeHtml(truncateText(book.description, 180))}</div>
@@ -432,7 +447,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       readingDuration: Number(document.getElementById('book-duration').value),
       publishDate: `${document.getElementById('book-publish-date').value}T00:00:00.000+00:00`,
       description: document.getElementById('book-description').value.trim(),
-      imageUrl: document.getElementById('book-image-url').value.trim()
+      imageUrl: document.getElementById('book-image-url').value.trim(),
+      totalCopies: Number(document.getElementById('book-total-copies').value),
+      availableCopies: Number(document.getElementById('book-available-copies').value)
     };
 
     try {
@@ -525,6 +542,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   document.getElementById('reset-book-form').addEventListener('click', resetBookForm);
+  totalCopiesInput.addEventListener('input', syncAvailableCopiesPreview);
   document.getElementById('reset-author-form').addEventListener('click', resetAuthorForm);
   document.getElementById('reset-publisher-form').addEventListener('click', resetPublisherForm);
   document.getElementById('reset-tag-form').addEventListener('click', resetTagForm);

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Loans - Book Nook</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body data-page="borrowings">
+  <div class="app-shell">
+    <main class="page">
+      <div id="loan-message" class="alert hidden"></div>
+      <section class="page-header">
+        <div>
+          <h1 class="page-title">My Loans And Reservations</h1>
+          <p class="page-subtitle">Track active loans, renew or return books, and manage your reservation queue.</p>
+        </div>
+        <div class="form-actions">
+          <button id="reload-loans" type="button">Reload</button>
+          <a href="books.html"><button type="button">Browse Books</button></a>
+        </div>
+      </section>
+
+      <section class="grid two">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Active Loans</h2>
+              <p class="muted">Each active loan can be renewed once.</p>
+            </div>
+          </div>
+          <div id="active-loans" class="loan-list"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Loan History</h2>
+              <p class="muted">Returned loans remain available for reference.</p>
+            </div>
+          </div>
+          <div id="loan-history" class="loan-list"></div>
+        </article>
+      </section>
+
+      <section class="grid two" style="margin-top:18px;">
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Active Reservations</h2>
+              <p class="muted">Reservations stay active until you cancel them or borrow the book.</p>
+            </div>
+          </div>
+          <div id="active-reservations" class="loan-list"></div>
+        </article>
+
+        <article class="card">
+          <div class="section-head">
+            <div>
+              <h2>Reservation History</h2>
+              <p class="muted">Completed and cancelled reservations are listed here.</p>
+            </div>
+          </div>
+          <div id="reservation-history" class="loan-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/ui.js"></script>
+  <script src="assets/js/borrowings.js"></script>
+</body>
+</html>

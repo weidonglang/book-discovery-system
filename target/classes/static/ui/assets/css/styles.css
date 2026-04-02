@@ -56,6 +56,51 @@ select[multiple] {
 }
 textarea { min-height: 120px; resize: vertical; }
 
+.filter-picker {
+  display: grid;
+  gap: 10px;
+}
+.filter-list {
+  max-height: 240px;
+  overflow: auto;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  display: grid;
+  gap: 8px;
+}
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+.filter-option {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.filter-option:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+.filter-option input {
+  width: auto;
+  margin: 0;
+  flex: 0 0 auto;
+}
+.filter-option span {
+  line-height: 1.4;
+}
+
 .app-shell {
   min-height: 100vh;
   display: flex;
@@ -365,6 +410,81 @@ textarea { min-height: 120px; resize: vertical; }
 .detail-cover .book-cover-fallback {
   min-height: 100%;
 }
+.loan-list {
+  display: grid;
+  gap: 14px;
+}
+.loan-card {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-soft);
+}
+.loan-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+}
+.loan-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.loan-cover .book-cover-fallback {
+  min-height: 100%;
+}
+.loan-body {
+  display: grid;
+  gap: 10px;
+}
+.loan-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.loan-head h3 {
+  margin: 0 0 4px;
+}
+.loan-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.loan-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.loan-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.loan-status.active {
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+.loan-status.pending {
+  color: #4338ca;
+  background: #e0e7ff;
+}
+.loan-status.returned {
+  color: #047857;
+  background: #d1fae5;
+}
+.loan-status.overdue {
+  color: #b45309;
+  background: #ffedd5;
+}
 .info-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -423,6 +543,9 @@ textarea { min-height: 120px; resize: vertical; }
 
 @media (max-width: 720px) {
   .hero, .detail-layout, .grid.two, .grid.three, .grid.four, .book-list, .stats, .admin-grid {
+    grid-template-columns: 1fr;
+  }
+  .loan-card {
     grid-template-columns: 1fr;
   }
   .topbar-inner, .page-header {

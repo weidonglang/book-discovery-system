@@ -142,9 +142,128 @@ function applyHomeHeader(user, categories, overview) {
   statWrap.innerHTML = renderHomeStats(user, categories, overview);
 }
 
+function updateLiveClock() {
+  const timeEl = document.getElementById('home-live-time');
+  const dateEl = document.getElementById('home-live-date');
+  if (!timeEl || !dateEl) return;
+
+  const now = new Date();
+  timeEl.textContent = now.toLocaleTimeString('zh-CN', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  dateEl.textContent = now.toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+  });
+
+  updateReadingTip(now);
+}
+
+function getWeatherVisual(code) {
+  if (code === 0 || code === 1) {
+    return { label: '晴朗', icon: '☀', className: 'weather-sun' };
+  }
+  if (code === 2 || code === 3) {
+    return { label: '多云', icon: '⛅', className: 'weather-cloud' };
+  }
+  if (code === 45 || code === 48) {
+    return { label: '有雾', icon: '〰', className: 'weather-fog' };
+  }
+  if ([51, 53, 55, 61, 63, 65, 80, 81, 82].includes(code)) {
+    return { label: '下雨', icon: '🌧', className: 'weather-rain' };
+  }
+  if ([71, 73, 75].includes(code)) {
+    return { label: '降雪', icon: '❄', className: 'weather-snow' };
+  }
+  if (code === 95) {
+    return { label: '雷暴', icon: '⛈', className: 'weather-storm' };
+  }
+  return { label: '天气更新中', icon: '⛅', className: 'weather-neutral' };
+}
+
+function setWeatherVisual(visual, temperature, copy) {
+  const iconEl = document.getElementById('home-weather-icon');
+  const textEl = document.getElementById('home-weather-text');
+  const copyEl = document.getElementById('home-weather-copy');
+  if (!iconEl || !textEl || !copyEl) return;
+
+  iconEl.textContent = visual.icon;
+  iconEl.className = `weather-icon ${visual.className}`;
+  textEl.textContent = temperature === null || temperature === undefined
+    ? visual.label
+    : `${visual.label} ${temperature}°C`;
+  copyEl.textContent = copy;
+}
+
+function updateReadingTip(now = new Date()) {
+  const titleEl = document.getElementById('home-reading-tip-title');
+  const copyEl = document.getElementById('home-reading-tip-copy');
+  if (!titleEl || !copyEl) return;
+
+  const hour = now.getHours();
+  if (hour < 9) {
+    titleEl.textContent = '晨间轻阅读';
+    copyEl.textContent = '适合先看推荐摘要或短篇图书，用更轻的内容开启今天的阅读状态。';
+  } else if (hour < 14) {
+    titleEl.textContent = '白天专注阅读';
+    copyEl.textContent = '如果你想系统地浏览图书，适合现在进入分类或检索页慢慢筛选。';
+  } else if (hour < 19) {
+    titleEl.textContent = '下午探索时段';
+    copyEl.textContent = '可以从相似图书和个性化推荐里继续扩展，寻找下一本想深入阅读的书。';
+  } else {
+    titleEl.textContent = '晚间沉浸阅读';
+    copyEl.textContent = '更适合从推荐书架里挑一本节奏稳定、可以连续投入时间的图书。';
+  }
+}
+
+async function loadWeatherWidget() {
+  const textEl = document.getElementById('home-weather-text');
+  const copyEl = document.getElementById('home-weather-copy');
+  if (!textEl || !copyEl || !navigator.geolocation) {
+    return;
+  }
+
+  const setFallback = message => {
+    setWeatherVisual({ label: '未获取', icon: '☁', className: 'weather-neutral' }, null, message);
+  };
+
+  navigator.geolocation.getCurrentPosition(async position => {
+    try {
+      const { latitude, longitude } = position.coords;
+      const response = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`
+      );
+      if (!response.ok) {
+        throw new Error('weather request failed');
+      }
+      const data = await response.json();
+      const current = data?.current || {};
+      const temperature = current.temperature_2m;
+      const weatherCode = current.weather_code;
+      const visual = getWeatherVisual(weatherCode);
+      setWeatherVisual(visual, temperature, '天气信息会根据你当前设备定位自动更新。');
+    } catch (error) {
+      setFallback('天气服务暂时不可用，你仍然可以正常浏览推荐内容。');
+    }
+  }, () => {
+    setFallback('未开启定位权限，无法显示当前位置天气。');
+  }, {
+    enableHighAccuracy: false,
+    timeout: 5000,
+    maximumAge: 10 * 60 * 1000
+  });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   if (!BookUi.requireLogin()) return;
   BookUi.injectLayout();
+
+  updateLiveClock();
+  window.setInterval(updateLiveClock, 30 * 1000);
+  loadWeatherWidget();
 
   const categoryWrap = document.getElementById('category-list');
   const recommendWrap = document.getElementById('recommend-list');

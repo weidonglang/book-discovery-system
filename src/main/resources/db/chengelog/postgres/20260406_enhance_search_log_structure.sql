@@ -1,0 +1,19 @@
+-- liquibase formatted sql
+
+-- changeset codex:20260406_enhance_search_log_structure
+ALTER TABLE public.search_log
+    ADD COLUMN IF NOT EXISTS category_ids TEXT NULL,
+    ADD COLUMN IF NOT EXISTS author_ids TEXT NULL,
+    ADD COLUMN IF NOT EXISTS publisher_ids TEXT NULL,
+    ADD COLUMN IF NOT EXISTS tag_ids TEXT NULL,
+    ADD COLUMN IF NOT EXISTS from_price DOUBLE PRECISION NULL,
+    ADD COLUMN IF NOT EXISTS to_price DOUBLE PRECISION NULL,
+    ADD COLUMN IF NOT EXISTS from_pages_number INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS to_pages_number INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS from_reading_duration INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS to_reading_duration INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS sort_by TEXT NULL,
+    ADD COLUMN IF NOT EXISTS page_number INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS page_size INTEGER NULL,
+    ADD COLUMN IF NOT EXISTS deleted_records BOOLEAN NULL,
+    ADD COLUMN IF NOT EXISTS result_count BIGINT NULL;

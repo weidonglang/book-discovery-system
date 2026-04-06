@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.henry</groupId>
+    <groupId>com.weidonglang</groupId>
     <artifactId>book-recommendation-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>book-recommendation-system</name>
@@ -55,6 +55,11 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>

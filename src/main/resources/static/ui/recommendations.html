@@ -3,24 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recommendations - Book Nook</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <title>Recommendations - 图书推荐系统</title>
+  <link rel="stylesheet" href="assets/css/common.css" />
+  <link rel="stylesheet" href="assets/css/recommendations.css" />
 </head>
 <body data-page="recommendations">
   <div class="app-shell">
     <main class="page">
       <div class="page-header">
         <div>
-          <h1 class="page-title">Recommendations</h1>
-          <p class="page-subtitle">This page keeps the logic intentionally simple and inspectable: popularity, reading preferences, and user-activity signals.</p>
+          <h1 class="page-title">My Recommendations</h1>
+          <p class="page-subtitle">Review recommendation shelves grouped by popularity, reading preferences, collaborative signals, and personal activity.</p>
         </div>
       </div>
       <section class="card">
         <h2>Recommendation Notes</h2>
         <p class="muted">Current user: <span id="recommend-user">Loading...</span></p>
-        <p class="muted">No collaborative filtering or complex model is used here. These shelves are based on explicit rules so they are easy to explain and debug.</p>
+        <p id="recommend-window-copy" class="muted">Popular shelves use a behavior-driven window so you can compare how short-term and medium-term activity change the results.</p>
+        <div class="form-actions">
+          <label class="field" for="recommend-window">
+            <span class="label">Popular Window</span>
+            <select id="recommend-window">
+              <option value="7">Last 7 days</option>
+              <option value="30" selected>Last 30 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </label>
+        </div>
       </section>
-      <section style="margin-top:20px;">
+      <section class="recommendations-section">
         <div id="recommend-result" class="recommend-stack"></div>
       </section>
     </main>

@@ -223,16 +223,15 @@
         ${hitMeta}
         <div class="book-actions">
           <a href="${detailHref}"
-             class="primary"
-             style="padding:10px 14px;border-radius:10px;background:#2563eb;color:#fff;"
+             class="action-link primary"
              data-behavior-track="1"
              data-action-type="${escapeHtml(actionType)}"
              data-book-id="${escapeHtml(id)}"
              data-source="${escapeHtml(source)}"
              data-reason="${escapeHtml(reason)}"
              data-keyword="${escapeHtml(searchKeyword)}">查看详情</a>
-          <a href="rate-book.html?bookId=${id}" style="padding:10px 14px;border-radius:10px;border:1px solid #dbe3ef;">评分</a>
-          ${authorId ? `<a href="books.html?authorId=${authorId}" style="padding:10px 14px;border-radius:10px;border:1px solid #dbe3ef;">同作者图书</a>` : ''}
+          <a href="rate-book.html?bookId=${id}" class="action-link">评分</a>
+          ${authorId ? `<a href="books.html?authorId=${authorId}" class="action-link">同作者图书</a>` : ''}
         </div>
       </article>`;
   }

@@ -4,28 +4,70 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>图书检索 - 图书推荐系统</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/common.css" />
+  <link rel="stylesheet" href="assets/css/books.css" />
 </head>
 <body data-page="books">
   <div class="app-shell">
-    <main class="page">
-      <div class="page-header">
-        <div>
-          <h1 class="page-title">图书检索</h1>
-          <p class="page-subtitle">支持按关键词、作者、分类、出版社、标签和数值区间筛选图书。</p>
-        </div>
-      </div>
+    <main class="page books-page">
+      <section class="books-hero">
+        <article class="card books-splash">
+          <div class="books-kicker">检索工作台</div>
+          <h1 class="books-hero-title">从关键词、分类和偏好条件里，把想看的书精准筛出来</h1>
+          <p class="books-hero-copy">
+            这一页保留了完整筛选能力，但视觉上会更接近首页的引导式布局。
+            你可以先快速搜索，再逐步加作者、标签、出版社、评分热度和库存等条件。
+          </p>
+          <div class="books-hero-actions">
+            <a class="button-link primary" href="recommendations.html">先看推荐结果</a>
+            <a class="button-link" href="profile.html">完善阅读偏好</a>
+          </div>
+        </article>
+
+        <article class="card books-overview-card">
+          <div class="books-kicker">筛选提示</div>
+          <div class="books-overview-grid">
+            <div class="books-overview-item">
+              <strong>组合检索</strong>
+              <span>关键词、作者、分类、标签可以叠加使用，适合逐步缩小范围。</span>
+            </div>
+            <div class="books-overview-item">
+              <strong>结果排序</strong>
+              <span>支持按评分、热度、出版时间、页数和库存等字段排序。</span>
+            </div>
+            <div class="books-overview-item">
+              <strong>可借优先</strong>
+              <span>搜索结果会直接展示可借库存，方便继续进入借阅或预约流程。</span>
+            </div>
+            <div class="books-overview-item">
+              <strong>适合演示</strong>
+              <span>整页信息结构更清楚，老师或答辩时也更容易讲解筛选逻辑。</span>
+            </div>
+          </div>
+        </article>
+      </section>
 
       <div id="books-message" class="alert hidden"></div>
 
-      <section class="card">
-        <form id="filter-form" class="form-grid">
-          <div class="field full">
+      <section class="card books-filter-card">
+        <div class="section-head books-section-head">
+          <div>
+            <h2>高级筛选</h2>
+            <p class="muted">先输入关键词，再按作者、分类、标签和区间条件逐步细化结果。</p>
+          </div>
+          <div class="books-filter-tip">
+            <span class="books-tip-dot"></span>
+            <span>筛选条件越具体，结果越容易接近首页推荐的精确感</span>
+          </div>
+        </div>
+
+        <form id="filter-form" class="form-grid books-filter-form">
+          <div class="field full books-keyword-field">
             <label class="label" for="keyword">关键词</label>
             <input id="keyword" placeholder="按书名、ISBN、作者、分类、出版社或标签搜索" />
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label" for="author-search">作者</label>
             <div class="filter-picker">
               <input id="author-search" placeholder="搜索作者名称" />
@@ -34,41 +76,41 @@
             </div>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label" for="publisher-filter">出版社</label>
             <select id="publisher-filter" multiple size="6"></select>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label">价格区间</label>
-            <div class="grid two">
+            <div class="grid two books-range-grid">
               <input id="fromPrice" type="number" step="0.01" placeholder="最低价格" />
               <input id="toPrice" type="number" step="0.01" placeholder="最高价格" />
             </div>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label">页数区间</label>
-            <div class="grid two">
+            <div class="grid two books-range-grid">
               <input id="fromPagesNumber" type="number" placeholder="最少页数" />
               <input id="toPagesNumber" type="number" placeholder="最多页数" />
             </div>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label">阅读时长区间</label>
-            <div class="grid two">
+            <div class="grid two books-range-grid">
               <input id="fromReadingDuration" type="number" placeholder="最短时长" />
               <input id="toReadingDuration" type="number" placeholder="最长时长" />
             </div>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label" for="pageSize">每页条数</label>
             <input id="pageSize" type="number" min="1" value="8" />
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label" for="sortField">排序字段</label>
             <select id="sortField">
               <option value="id">图书编号</option>
@@ -83,7 +125,7 @@
             </select>
           </div>
 
-          <div class="field">
+          <div class="field books-field-card">
             <label class="label" for="sortDirection">排序方向</label>
             <select id="sortDirection">
               <option value="ASC">升序</option>
@@ -91,38 +133,45 @@
             </select>
           </div>
 
-          <div class="field full">
+          <div class="field full books-choice-block">
             <label class="label">分类</label>
             <div id="category-filters" class="choice-grid"></div>
           </div>
 
-          <div class="field full">
+          <div class="field full books-choice-block">
             <label class="label">标签</label>
             <div id="tag-filters" class="choice-grid"></div>
           </div>
 
           <div class="field full">
-            <div class="form-actions">
-              <button class="primary" type="submit">搜索</button>
-              <button id="reset-search" type="button">重置</button>
+            <div class="form-actions books-form-actions">
+              <button class="primary" type="submit">开始检索</button>
+              <button id="reset-search" type="button">重置条件</button>
             </div>
           </div>
         </form>
       </section>
 
-      <section>
-        <div class="page-header">
+      <section class="card books-results-shell">
+        <div class="page-header books-results-header">
           <div>
-            <h2 class="page-title" style="font-size:24px;">检索结果</h2>
+            <h2 class="page-title books-results-title">检索结果</h2>
             <p id="page-summary" class="page-subtitle">尚未执行搜索。</p>
           </div>
-          <div class="form-actions">
+          <div class="books-results-actions">
             <input id="currentPage" type="hidden" value="1" />
             <button id="prev-page" type="button">上一页</button>
             <button id="next-page" type="button">下一页</button>
           </div>
         </div>
-        <div id="book-results" class="book-list"></div>
+
+        <div class="books-results-pills">
+          <span class="books-result-pill">支持多条件组合检索</span>
+          <span class="books-result-pill">结果卡片保留推荐理由展示风格</span>
+          <span class="books-result-pill">可直接进入详情、评分与借阅流程</span>
+        </div>
+
+        <div id="book-results" class="book-list books-results-grid"></div>
       </section>
     </main>
   </div>

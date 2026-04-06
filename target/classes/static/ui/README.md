@@ -8,6 +8,10 @@
 http://localhost:8010/book-service/ui/login.html
 ```
 
+CSS organization:
+- `assets/css/common.css`: shared layout, navigation, forms, cards, and reusable book/loan components
+- `assets/css/index.css`, `books.css`, `book-detail.css`, and the other page CSS files: page-specific styles maintained alongside each HTML page
+
 主要页面：
 
 1. `login.html`

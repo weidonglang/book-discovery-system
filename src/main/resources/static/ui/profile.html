@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>个人中心 - 图书推荐系统</title>
-  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/common.css" />
+  <link rel="stylesheet" href="assets/css/profile.css" />
 </head>
 <body data-page="profile">
   <div class="app-shell">
@@ -26,7 +27,7 @@
             <div class="info-item"><div class="info-key">邮箱</div><div id="profile-email-view" class="info-value">-</div></div>
           </div>
 
-          <form id="profile-form" class="form-grid" style="margin-top:16px;">
+          <form id="profile-form" class="form-grid profile-form">
             <input id="profile-id-input" type="hidden" />
             <div class="field"><label class="label">名</label><input id="firstName" /></div>
             <div class="field"><label class="label">姓</label><input id="lastName" /></div>
@@ -83,7 +84,7 @@
               </div>
             </div>
           </form>
-          <div class="alert info" style="margin-top:16px;">这里先用最简单的分类 ID 文本输入，后面可以继续升级成真正的分类多选组件。</div>
+          <div class="alert info profile-reading-note">这里先用最简单的分类 ID 文本输入，后面可以继续升级成真正的分类多选组件。</div>
         </article>
       </section>
     </main>

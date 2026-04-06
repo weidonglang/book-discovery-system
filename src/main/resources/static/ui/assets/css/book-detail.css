@@ -1,0 +1,44 @@
+.detail-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 18px;
+}
+
+.detail-cover {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+}
+
+.detail-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.detail-cover .book-cover-fallback {
+  min-height: 100%;
+}
+
+.detail-section {
+  margin-top: 20px;
+}
+
+.detail-section-title {
+  font-size: 24px;
+}
+
+@media (max-width: 980px) {
+  .detail-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

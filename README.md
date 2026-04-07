@@ -1,23 +1,76 @@
-# 新书推荐系统
+# 图书推荐与借阅管理系统
 
-一个面向图书推荐与图书流通管理的后端系统，基于 Spring Boot、Spring Security、JPA/Hibernate、PostgreSQL 和 Liquibase 构建。
+一个面向毕业设计、课程设计和功能演示场景的图书推荐系统，包含后端 API、权限认证、借阅流转、推荐能力，以及一套可直接访问的前端页面。
 
-## 项目定位
+项目当前重点是：
 
-本项目主要用于本科毕业设计 / 课程设计展示，重点放在：
-
-- 图书推荐与个性化展示
-- 图书借阅、归还、续借、预约
-- 用户注册、登录、评分、行为记录
-- 数据库版本管理与基础后台能力
-
-当前实现以本地开发、论文答辩演示、功能验证为主，不以生产环境直接部署为目标。
+- 图书检索、详情、评分、推荐与行为记录
+- 图书借阅、归还、续借、预约与排队
+- 用户注册、登录、令牌刷新与权限控制
+- PostgreSQL 持久化与 Liquibase 数据库版本管理
+- 适合答辩演示的前后端一体化体验
 
 主包名：
 
 ```text
 com.weidonglang.NewBookRecommendationSystem
 ```
+
+## 项目定位
+
+这个项目更适合作为：
+
+- 本科毕业设计
+- 课程设计
+- 功能展示型作品集项目
+- 推荐系统与图书流通管理方向的教学演示项目
+
+它已经具备较完整的业务链路，但默认配置仍以本地开发和演示为主，不建议直接按当前配置投入生产环境。
+
+## 功能概览
+
+### 用户与认证
+
+- 用户注册、登录、退出登录
+- Access Token / Refresh Token 认证流程
+- 基于 Spring Security 的权限控制
+- 默认管理员账号自动引导创建
+
+### 图书与检索
+
+- 图书列表与多条件筛选
+- 作者、分类、标签、出版社维度筛选
+- 图书详情页
+- 图书评分
+- 用户行为记录与搜索日志
+
+### 推荐能力
+
+- 热门图书推荐
+- 基于阅读偏好的推荐
+- 基于评分和借阅行为的推荐
+- 相似图书推荐
+- 推荐总览书架
+- 首页阅读看板与推荐预览
+
+### 借阅流转
+
+- 借阅
+- 归还
+- 续借
+- 预约
+- 预约排队与队首优先借阅
+- 借阅状态与到期提醒展示
+
+### 前端页面
+
+前端静态页面位于 `src/main/resources/static/ui`，当前包含：
+
+- 首页阅读看板
+- 图书检索工作台
+- 图书详情页
+- 推荐书架页
+- 登录、注册、个人中心、借阅记录等页面
 
 ## 技术栈
 
@@ -29,79 +82,87 @@ com.weidonglang.NewBookRecommendationSystem
 - Hibernate
 - PostgreSQL
 - Liquibase
-- Lombok
-- MapStruct
 - JWT (`com.auth0:java-jwt`)
+- MapStruct
+- Lombok
 - springdoc-openapi-ui
+- 原生 HTML / CSS / JavaScript 前端页面
 
 ## 目录结构
 
 ```text
-new-book-recommendation-system/
+book-recommendation-system/
 ├─ src/main/java/com/weidonglang/NewBookRecommendationSystem/
-│  ├─ config/
-│  ├─ controller/
-│  ├─ dao/
-│  ├─ dto/
-│  ├─ entity/
-│  ├─ enums/
-│  ├─ exception/
-│  ├─ manager/
-│  ├─ recommender/
-│  ├─ repository/
-│  ├─ security/
-│  ├─ service/
-│  ├─ transformer/
-│  └─ utils/
+│  ├─ config/          # 配置与启动初始化
+│  ├─ controller/      # 接口控制层
+│  ├─ dao/             # 数据访问实现
+│  ├─ dto/             # 请求/响应 DTO
+│  ├─ entity/          # 数据实体
+│  ├─ enums/           # 枚举定义
+│  ├─ exception/       # 全局异常处理
+│  ├─ manager/         # 认证与基础管理器
+│  ├─ recommender/     # 推荐相关实现
+│  ├─ repository/      # JPA Repository
+│  ├─ security/        # 安全配置与 JWT 过滤
+│  ├─ service/         # 业务服务层
+│  ├─ transformer/     # DTO / Entity 转换
+│  └─ utils/           # 通用工具
 ├─ src/main/resources/
 │  ├─ application.properties
 │  ├─ application-dev.properties
-│  └─ db/
-├─ src/test/java/com/weidonglang/NewBookRecommendationSystem/
-├─ scripts/
+│  ├─ db/              # Liquibase 脚本
+│  ├─ json/            # 初始化或导入数据
+│  └─ static/ui/       # 前端页面
+├─ scripts/            # 项目辅助脚本
 ├─ pom.xml
 ├─ mvnw.cmd
 └─ mvnw-jdk11.cmd
 ```
 
-## 默认运行配置
+## 运行环境
 
-默认配置位于 [application.properties](/F:/code/java/new-book-recommendation-system/src/main/resources/application.properties)：
+建议环境：
 
-- 端口：`8010`
+- JDK 11
+- Maven Wrapper（项目已内置）
+- PostgreSQL 12+
+- Windows + IntelliJ IDEA 或任意支持 Maven 的 IDE
+
+## 默认配置
+
+当前默认配置来自 `src/main/resources/application.properties`：
+
+- 服务端口：`8010`
 - 上下文路径：`/book-service`
 - 数据库：`book_recommendation_system`
-- PostgreSQL：`localhost:5043`
+- 默认数据库地址：`jdbc:postgresql://localhost:5043/book_recommendation_system`
+- Swagger UI：`/swagger-ui/index.html`
 
 默认管理员账号：
 
-- Email: `admin@booknook.local`
-- Password: `Admin123!`
+- 邮箱：`admin@booknook.local`
+- 密码：`Admin123!`
 
-## 使用 JDK 11 运行
+## 启动前说明
 
-如果本机默认 Java 不是 11，优先使用项目内脚本：
+项目配置里当前保留了本地开发用数据库连接与 JWT 密钥。若你准备对外发布、部署或多人协作，建议先做这些调整：
 
-```bat
-mvnw-jdk11.cmd -DskipTests compile
-mvnw-jdk11.cmd spring-boot:run
-```
-
-这个脚本会临时指定：
-
-```text
-C:\Program Files\Java\jdk-11.0.30+7
-```
+- 修改数据库用户名和密码
+- 修改 JWT Secret
+- 使用环境变量或外部配置管理敏感信息
+- 不要继续把本地密码直接提交到公共仓库
 
 ## 快速启动
 
-### 1. 创建 PostgreSQL 数据库
+### 1. 创建数据库
 
 ```sql
 CREATE DATABASE book_recommendation_system;
 ```
 
-### 2. 按需修改数据库连接
+### 2. 修改数据库连接
+
+按你的本地环境修改 `src/main/resources/application.properties`：
 
 ```properties
 spring.datasource.url=jdbc:postgresql://localhost:5043/book_recommendation_system
@@ -109,70 +170,67 @@ spring.datasource.username=postgres
 spring.datasource.password=your_password
 ```
 
-### 3. 编译并启动
+### 3. 使用 JDK 11 编译
+
+如果你本机默认 Java 不是 11，优先使用项目脚本：
 
 ```bat
 mvnw-jdk11.cmd -DskipTests compile
+```
+
+### 4. 启动项目
+
+```bat
 mvnw-jdk11.cmd spring-boot:run
 ```
 
-### 4. 访问地址
+如果你的环境已经正确切到 JDK 11，也可以直接用：
 
-```text
-http://localhost:8010/book-service
-http://localhost:8010/book-service/swagger-ui/index.html
+```bat
+mvnw.cmd spring-boot:run
 ```
 
-## 功能概览
+## 访问入口
 
-当前已实现的核心功能包括：
+启动成功后可访问：
 
-- 用户注册、登录、刷新令牌、退出登录
-- 图书、作者、分类、标签、出版社管理
-- 图书评分
-- 推荐书架与相似图书推荐
-- 图书借阅、归还、续借
-- 图书预约与排队
-- 搜索与行为日志记录
-- Liquibase 数据库版本管理
-
-## 推荐能力
-
-系统当前包含以下推荐能力：
-
-- 热门图书推荐
-- 基于阅读偏好的推荐
-- 基于评分与借阅行为的推荐
-- 相似图书推荐
-- 保留协同过滤推荐器实现，便于后续扩展
+- 后端根路径：`http://localhost:8010/book-service`
+- Swagger 文档：`http://localhost:8010/book-service/swagger-ui/index.html`
+- 前端登录页：`http://localhost:8010/book-service/ui/login.html`
+- 前端首页：`http://localhost:8010/book-service/ui/index.html`
 
 ## 借阅与预约规则
+
+当前系统内置的业务规则包括：
 
 - 每位用户最多同时借阅 5 本书
 - 默认借期 14 天
 - 每笔借阅最多续借 1 次
 - 每次续借延长 7 天
 - 同一本未归还图书不能重复借阅
-- 有预约队列时，仅队首用户可优先借阅
+- 图书无可借库存时可进入预约队列
+- 有预约队列时，通常由队首用户优先借阅
 
-## 项目说明
+## 推荐能力说明
 
-这个项目当前更适合作为毕业设计演示系统使用。
+系统当前已经具备以下推荐能力：
 
-也就是说：
+- 推荐总览书架
+- 热门推荐
+- 基于偏好的推荐
+- 基于评分和借阅行为的推荐
+- 相似图书推荐
+- 同作者延伸浏览
+- 首页阅读建议与推荐预览
 
-- 当前配置更偏向本地快速启动
-- 重点是功能完整、可演示、可答辩说明
-- 一些安全强化和生产化治理可以作为后续扩展点写进论文或答辩说明
+如果后续继续深化，可以进一步扩展：
 
-如果后续继续向生产级项目推进，可以进一步补充：
+- 协同过滤排序权重优化
+- 混合推荐策略
+- 推荐理由解释能力增强
+- 用户画像可视化
 
-- Refresh Token 哈希存储
-- 更严格的数据库约束
-- 配置外置化和密钥管理
-- 更完整的审计、限流和日志脱敏
-
-## API 示例
+## 常用接口示例
 
 ### 登录
 
@@ -183,8 +241,8 @@ Content-Type: application/json
 
 ```json
 {
-  "email": "wei@example.com",
-  "password": "123456"
+  "email": "admin@booknook.local",
+  "password": "Admin123!"
 }
 ```
 
@@ -203,7 +261,7 @@ Content-Type: application/json
 }
 ```
 
-### 借书
+### 借阅图书
 
 ```http
 POST /book-service/api/loan/borrow
@@ -217,42 +275,81 @@ Content-Type: application/json
 }
 ```
 
-## 这次如何测试
+## 测试与验证建议
 
-### 1. 直接编译
+建议至少按下面顺序验证：
+
+1. 编译项目
 
 ```bat
 mvnw-jdk11.cmd -DskipTests compile
 ```
 
-如果通过，说明配置已经恢复成“开箱可跑”的状态。
-
-### 2. 直接启动
+2. 启动项目
 
 ```bat
 mvnw-jdk11.cmd spring-boot:run
 ```
 
-### 3. 登录测试
+3. 验证登录
 
-如果数据库里还没有管理员，项目启动时会自动创建默认管理员。
+- 使用默认管理员登录
+- 检查 Access Token / Refresh Token 是否正常工作
 
-然后你可以用下面账号登录：
+4. 验证核心业务
 
-- 邮箱：`admin@booknook.local`
-- 密码：`Admin123!`
+- 检索图书
+- 查看图书详情
+- 评分
+- 借阅 / 归还 / 续借 / 预约
+- 查看推荐页与首页看板
 
-登录接口：
+## 二次开发建议
 
-```http
-POST /book-service/api/auth/log-in
-```
+如果你准备基于本项目继续开发，建议优先从这些方向入手：
 
-请求体：
+- 把敏感配置移出 `application.properties`
+- 补充单元测试和集成测试
+- 优化异常码与统一响应结构
+- 增强 JWT、刷新令牌和登出策略
+- 为推荐服务增加更清晰的策略分层
+- 为前端页面加入更完整的国际化和状态反馈
 
-```json
-{
-  "email": "admin@booknook.local",
-  "password": "Admin123!"
-}
-```
+## 贡献说明
+
+欢迎任何形式的贡献，包括但不限于：
+
+- 提交 Issue
+- 修复 Bug
+- 补充文档
+- 优化样式或前端交互
+- 增强推荐算法
+- 增加测试
+- 提交 Pull Request
+- 基于此项目继续二次开发
+
+如果你准备贡献代码，建议：
+
+- 保持提交粒度清晰
+- 尽量不要混入无关改动
+- 对配置、依赖和数据库脚本改动写清楚目的
+
+## 开源许可
+
+本项目采用 MIT License。
+
+这意味着你基本可以自由地：
+
+- 使用
+- 下载
+- 复制
+- 修改
+- 二次开发
+- 分发
+- 商用
+- 提交衍生工具
+- 贡献代码
+
+唯一需要保留的是原始许可声明与版权声明，同时作者不对软件使用结果承担担保责任。
+
+完整许可见 [LICENSE](LICENSE)。

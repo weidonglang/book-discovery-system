@@ -79,7 +79,7 @@
         </div>
 
         <div class="insight-grid insight-grid-primary">
-          <article class="card insight-card insight-card-priority accent-blue">
+          <article class="card insight-card insight-card-priority insight-card-balanced accent-blue">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">1. 连续阅读</span>
@@ -90,10 +90,10 @@
               <strong id="reading-streak-days">0</strong>
               <span>天</span>
             </div>
-            <p id="reading-streak-copy" class="muted">最近还没有形成连续阅读记录。</p>
+            <p id="reading-streak-copy" class="muted insight-copy">最近还没有形成连续阅读记录。</p>
           </article>
 
-          <article class="card insight-card accent-amber">
+          <article class="card insight-card insight-card-balanced accent-amber">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">2. 到期提醒</span>
@@ -105,11 +105,11 @@
               <strong id="due-reminder-count">0</strong>
               <span>条提醒</span>
             </div>
-            <p id="due-reminder-copy" class="muted">暂无临近到期或已逾期的图书。</p>
-            <div id="due-reminder-preview" class="compact-list"></div>
+            <p id="due-reminder-copy" class="muted insight-copy">暂无临近到期或已逾期的图书。</p>
+            <div id="due-reminder-preview" class="compact-list insight-list"></div>
           </article>
 
-          <article class="card insight-card accent-cyan">
+          <article class="card insight-card insight-card-balanced accent-cyan">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">3. 最近浏览</span>
@@ -117,18 +117,19 @@
               </div>
               <button type="button" class="action-link soft" data-modal-open="recent">查看详情</button>
             </div>
-            <div id="recent-viewed-preview" class="compact-list"></div>
+            <p class="muted insight-copy">保留最近打开的作品，方便你从上次停下的位置继续。</p>
+            <div id="recent-viewed-preview" class="compact-list insight-list"></div>
           </article>
 
-          <article class="card insight-card insight-card-priority accent-mint">
+          <article class="card insight-card insight-card-priority insight-card-balanced accent-mint">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">4. 今日推荐一句话</span>
                 <h3 id="daily-suggestion-title">正在生成今日建议</h3>
               </div>
             </div>
-            <p id="daily-suggestion-copy" class="muted">稍后会根据你的节奏、偏好和当前时段，给出一条更具体的阅读建议。</p>
-            <div class="hero-actions compact">
+            <p id="daily-suggestion-copy" class="muted insight-copy">稍后会根据你的节奏、偏好和当前时段，给出一条更具体的阅读建议。</p>
+            <div class="hero-actions compact insight-actions">
               <a id="daily-suggestion-link" class="button-link soft" href="recommendations.html">去看看推荐</a>
             </div>
           </article>

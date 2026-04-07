@@ -849,7 +849,7 @@ function mergeRecentViewedBooks() {
 }
 
 function renderRecentViewedCard() {
-  const recentBooks = mergeRecentViewedBooks().slice(0, 3);
+  const recentBooks = mergeRecentViewedBooks().slice(0, 2);
   document.getElementById('recent-viewed-preview').innerHTML = renderCompactItems(
     recentBooks,
     isChinese() ? '还没有最近浏览记录。你打开过的图书会出现在这里。' : 'No recent views yet. Books you open will appear here.',

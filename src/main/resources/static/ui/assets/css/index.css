@@ -196,6 +196,51 @@
 
 .insight-grid-primary {
   margin-bottom: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.insight-grid-primary .insight-card,
+.insight-grid-primary .insight-card-priority {
+  grid-column: auto;
+}
+
+.insight-card-balanced {
+  min-height: 320px;
+}
+
+.insight-grid-primary .insight-card-balanced {
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-grid-primary .insight-head {
+  min-height: 74px;
+}
+
+.insight-copy {
+  margin: 0;
+  line-height: 1.68;
+}
+
+.insight-grid-primary .insight-copy {
+  min-height: 3.4em;
+}
+
+.insight-list {
+  align-content: start;
+}
+
+.insight-grid-primary .insight-list,
+.insight-grid-primary .insight-actions {
+  margin-top: auto;
+}
+
+.insight-grid-primary .compact-list {
+  gap: 10px;
+}
+
+.insight-grid-primary .compact-item {
+  min-height: 72px;
 }
 
 .insight-grid-secondary .insight-card {
@@ -754,6 +799,10 @@
 
   .home-side-column {
     position: static;
+  }
+
+  .insight-grid-primary {
+    grid-template-columns: 1fr;
   }
 }
 

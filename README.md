@@ -322,6 +322,7 @@ On top of the original project, I extended the system with borrowing, returning,
 
 本项目基于 henry-azer/book-recommendation-system 进行二次开发。
 在原有图书推荐能力基础上，新增/完善了借阅、归还、续借、预约排队、后台管理、部署脚本与文档说明等功能。
+
 欢迎任何形式的贡献，包括但不限于：
 
 - 提交 Issue

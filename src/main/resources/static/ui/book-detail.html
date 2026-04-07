@@ -13,10 +13,11 @@
       <div id="detail-message" class="alert hidden"></div>
       <div class="page-header">
         <div>
+          <div class="panel-kicker detail-page-kicker">作品页</div>
           <h1 class="page-title">图书详情</h1>
-          <p class="page-subtitle">查看图书完整信息，包括出版社、标签、库存、借阅与预约状态。</p>
+          <p class="page-subtitle">查看图书完整信息，包括出版社、标签、库存、借阅与预约状态，并从同类作品继续延伸阅读。</p>
         </div>
-        <div class="form-actions">
+        <div class="form-actions detail-action-bar">
           <button id="borrow-book-btn" type="button">借阅图书</button>
           <button id="reserve-book-btn" class="hidden" type="button">预约图书</button>
           <button id="cancel-reservation-btn" class="hidden" type="button">取消预约</button>
@@ -29,7 +30,10 @@
         <article class="card">
           <div id="detail-cover" class="detail-cover"></div>
         </article>
-        <article class="card">
+        <article class="card detail-content-card">
+          <div class="detail-copy-lead">
+            <div class="panel-kicker">作品导读</div>
+          </div>
           <h2 id="detail-title">加载中...</h2>
           <p id="detail-desc" class="hero-copy"></p>
           <div id="detail-meta" class="info-list"></div>
@@ -39,7 +43,7 @@
         <div class="page-header">
           <div>
             <h2 class="page-title detail-section-title">相关图书推荐</h2>
-            <p class="page-subtitle">基于当前图书的同分类和相似标签生成推荐结果。</p>
+            <p class="page-subtitle">先从同分类和相似标签继续扩展，帮助你沿着当前阅读兴趣往下走。</p>
           </div>
         </div>
         <div id="similar-books" class="recommend-stack"></div>
@@ -48,7 +52,7 @@
         <div class="page-header">
           <div>
             <h2 class="page-title detail-section-title">同作者更多作品</h2>
-            <p class="page-subtitle">补充展示同一作者的其他图书，方便继续浏览。</p>
+            <p class="page-subtitle">如果你想继续停留在同一种写作风格里，可以从这里直接切换到作者书架。</p>
           </div>
         </div>
         <div id="author-books" class="book-list"></div>

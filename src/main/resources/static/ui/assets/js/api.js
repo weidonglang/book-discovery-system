@@ -31,6 +31,20 @@
     localStorage.removeItem(USER_KEY);
   }
 
+  function isInvalidTokenResponse(status, message) {
+    const text = String(message || '').trim();
+    if (status === 401 || status === 403) return true;
+    if (status !== 400 || !text) return false;
+    return /issuer|invalid jwt|expired access token|verification/i.test(text);
+  }
+
+  function redirectToLogin() {
+    const current = window.location.pathname.split('/').pop() || 'index.html';
+    if (current === 'login.html' || current === 'register.html') return;
+    const target = `login.html?redirect=${encodeURIComponent(current + window.location.search)}`;
+    window.location.href = target;
+  }
+
   function saveCurrentUser(user) {
     if (user) localStorage.setItem(USER_KEY, JSON.stringify(user));
   }
@@ -81,6 +95,12 @@
       data = await response.json();
     } catch (e) {
       data = null;
+    }
+
+    const rawMessage = data?.message || data?.error || '';
+    if (!response.ok && isInvalidTokenResponse(response.status, rawMessage)) {
+      clearSession();
+      redirectToLogin();
     }
 
     if (!response.ok) {

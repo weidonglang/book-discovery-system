@@ -68,7 +68,7 @@
             <input id="keyword" placeholder="按书名、ISBN、作者、分类、出版社或标签搜索" />
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-feature">
             <label class="label" for="author-search">作者</label>
             <div class="filter-picker">
               <input id="author-search" placeholder="搜索作者名称" />
@@ -77,12 +77,12 @@
             </div>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-feature">
             <label class="label" for="publisher-filter">出版社</label>
             <select id="publisher-filter" multiple size="6"></select>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-range-card">
             <label class="label">价格区间</label>
             <div class="grid two books-range-grid">
               <input id="fromPrice" type="number" step="0.01" placeholder="最低价格" />
@@ -90,7 +90,7 @@
             </div>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-range-card">
             <label class="label">页数区间</label>
             <div class="grid two books-range-grid">
               <input id="fromPagesNumber" type="number" placeholder="最少页数" />
@@ -98,7 +98,7 @@
             </div>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-range-card">
             <label class="label">阅读时长区间</label>
             <div class="grid two books-range-grid">
               <input id="fromReadingDuration" type="number" placeholder="最短时长" />
@@ -106,12 +106,12 @@
             </div>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-compact">
             <label class="label" for="pageSize">每页条数</label>
             <input id="pageSize" type="number" min="1" value="8" />
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-compact">
             <label class="label" for="sortField">排序字段</label>
             <select id="sortField">
               <option value="id">图书编号</option>
@@ -126,7 +126,7 @@
             </select>
           </div>
 
-          <div class="field books-field-card">
+          <div class="field books-field-card books-field-compact">
             <label class="label" for="sortDirection">排序方向</label>
             <select id="sortDirection">
               <option value="ASC">升序</option>
@@ -144,7 +144,7 @@
             <div id="tag-filters" class="choice-grid"></div>
           </div>
 
-          <div class="field full">
+          <div class="field full books-form-footer">
             <div class="form-actions books-form-actions">
               <button class="primary" type="submit">开始检索</button>
               <button id="reset-search" type="button">重置条件</button>
@@ -167,6 +167,8 @@
             <button id="next-page" type="button">下一页</button>
           </div>
         </div>
+
+        <div id="active-filter-summary" class="books-active-filters hidden"></div>
 
         <div class="books-results-pills">
           <span class="books-result-pill">支持多条件组合检索</span>

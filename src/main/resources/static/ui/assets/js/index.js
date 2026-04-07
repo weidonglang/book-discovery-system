@@ -311,6 +311,9 @@ function setWeatherVisual(visual, temperature, copy) {
 }
 
 const WEATHER_COORDS_KEY = 'book_weather_coords_cache';
+const WEATHER_SNAPSHOT_KEY = 'book_weather_snapshot_cache';
+const WEATHER_SNAPSHOT_TTL_MS = 30 * 60 * 1000;
+let weatherRenderPriority = -1;
 
 function loadCachedWeatherCoords() {
   try {
@@ -332,6 +335,36 @@ function loadCachedWeatherCoords() {
   }
 }
 
+function loadCachedWeatherSnapshot() {
+  try {
+    const raw = window.localStorage.getItem(WEATHER_SNAPSHOT_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    const savedAt = Number(parsed?.savedAt);
+    if (!savedAt || Date.now() - savedAt > WEATHER_SNAPSHOT_TTL_MS) {
+      return null;
+    }
+    const label = String(parsed?.visual?.label || '').trim();
+    const icon = String(parsed?.visual?.icon || '').trim();
+    const className = String(parsed?.visual?.className || '').trim();
+    if (!label || !icon || !className) {
+      return null;
+    }
+    return {
+      visual: {
+        label,
+        icon,
+        className
+      },
+      temperature: parsed?.temperature,
+      source: parsed?.source || 'cache',
+      savedAt
+    };
+  } catch (error) {
+    return null;
+  }
+}
+
 function saveWeatherCoords(latitude, longitude, source = 'browser') {
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) return;
   try {
@@ -344,6 +377,64 @@ function saveWeatherCoords(latitude, longitude, source = 'browser') {
   } catch (error) {
     console.warn('weather coords cache failed:', error.message);
   }
+}
+
+function saveWeatherSnapshot(weatherResult, source = 'browser') {
+  if (!weatherResult?.visual?.label || !weatherResult?.visual?.icon || !weatherResult?.visual?.className) return;
+  try {
+    window.localStorage.setItem(WEATHER_SNAPSHOT_KEY, JSON.stringify({
+      visual: weatherResult.visual,
+      temperature: weatherResult.temperature,
+      source,
+      savedAt: Date.now()
+    }));
+  } catch (error) {
+    console.warn('weather snapshot cache failed:', error.message);
+  }
+}
+
+function getWeatherRenderPriority(source) {
+  if (source === 'browser') return 3;
+  if (source === 'ip') return 2;
+  if (source === 'cache') return 1;
+  if (source === 'cache-snapshot') return 0;
+  return 0;
+}
+
+function buildWeatherCopy(source, options = {}) {
+  if (options.fromSnapshot) {
+    return isChinese()
+      ? '先显示最近一次天气记录，系统正在刷新当前位置天气。'
+      : 'Showing the most recent weather snapshot first while refreshing your current local weather.';
+  }
+  if (source === 'ip') {
+    return isChinese()
+      ? '已根据当前网络位置近似获取天气，定位完成后会自动刷新为更精确结果。'
+      : 'Weather is based on an approximate network location and will refresh automatically if precise device location becomes available.';
+  }
+  if (source === 'cache') {
+    return isChinese()
+      ? '已根据最近一次定位快速刷新天气，当前位置结果返回后会自动覆盖。'
+      : 'Weather was refreshed from your last known location and will be replaced automatically if current location data arrives.';
+  }
+  return isChinese()
+    ? '天气信息会根据你当前设备定位自动更新。'
+    : 'Weather updates automatically according to your device location.';
+}
+
+function applyWeatherResult(weatherResult, source = 'browser', options = {}) {
+  if (!weatherResult?.visual) return false;
+  const incomingPriority = getWeatherRenderPriority(source);
+  if (incomingPriority < weatherRenderPriority) {
+    return false;
+  }
+  weatherRenderPriority = incomingPriority;
+  setWeatherVisual(weatherResult.visual, weatherResult.temperature, buildWeatherCopy(source, options));
+  renderDailySuggestion(new Date(), weatherResult.visual.label);
+  if (!options.fromSnapshot) {
+    saveWeatherSnapshot(weatherResult, source);
+  }
+  return true;
 }
 
 async function fetchWeatherByCoords(latitude, longitude, source = 'browser') {
@@ -419,6 +510,8 @@ async function fetchWeatherByCoords(latitude, longitude, source = 'browser') {
       : 'Weather updates automatically according to your device location.');
   setWeatherVisual(weatherResult.visual, weatherResult.temperature, copy);
   renderDailySuggestion(new Date(), weatherResult.visual.label);
+  saveWeatherSnapshot(weatherResult, source);
+  return weatherResult;
 }
 
 async function fetchWeatherByIp() {
@@ -468,7 +561,7 @@ async function fetchWeatherByIp() {
     throw lastError || new Error('ip geolocation coordinates missing');
   }
   saveWeatherCoords(coords.latitude, coords.longitude, 'ip');
-  await fetchWeatherByCoords(coords.latitude, coords.longitude, 'ip');
+  return fetchWeatherByCoords(coords.latitude, coords.longitude, 'ip');
 }
 
 function updateReadingTip(now = new Date()) {
@@ -505,6 +598,20 @@ async function loadWeatherWidget() {
   const copyEl = document.getElementById('home-weather-copy');
   if (!textEl || !copyEl) {
     return;
+  }
+
+  weatherRenderPriority = -1;
+
+  const cachedSnapshot = loadCachedWeatherSnapshot();
+  if (cachedSnapshot) {
+    applyWeatherResult(cachedSnapshot, 'cache-snapshot', { fromSnapshot: true });
+  }
+
+  const cachedCoords = loadCachedWeatherCoords();
+  if (cachedCoords) {
+    fetchWeatherByCoords(cachedCoords.latitude, cachedCoords.longitude, 'cache').catch(error => {
+      console.warn('cached weather lookup failed:', error.message);
+    });
   }
 
   let settled = false;
@@ -574,11 +681,10 @@ async function loadWeatherWidget() {
 
   fallbackTimer = window.setTimeout(() => {
     finishWithFallback(weatherTimeoutMessage);
-  }, 6500);
+  }, 1800);
 
   navigator.geolocation.getCurrentPosition(async position => {
     try {
-      if (settled) return;
       const { latitude, longitude } = position.coords;
       saveWeatherCoords(latitude, longitude, 'browser');
       settled = true;
@@ -594,8 +700,8 @@ async function loadWeatherWidget() {
     await finishWithFallback(isChinese() ? '未开启定位权限，无法显示当前位置天气。' : 'Location permission is disabled, so local weather cannot be shown.');
   }, {
     enableHighAccuracy: false,
-    timeout: 5000,
-    maximumAge: 10 * 60 * 1000
+    timeout: 3200,
+    maximumAge: 30 * 60 * 1000
   });
 }
 

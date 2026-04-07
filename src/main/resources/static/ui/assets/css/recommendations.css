@@ -1,13 +1,54 @@
+.recommend-intro-card {
+  background:
+    radial-gradient(circle at top left, rgba(124, 75, 52, 0.1), transparent 34%),
+    linear-gradient(180deg, rgba(255, 251, 245, 0.98) 0%, rgba(243, 234, 221, 0.95) 100%);
+}
+
+.recommend-intro-card h2 {
+  margin-top: 0;
+  font-family: var(--font-display);
+  color: var(--primary-deep);
+}
+
+.recommend-intro-card .form-actions {
+  margin-top: 18px;
+  justify-content: flex-start;
+}
+
 .recommendations-section {
-  margin-top: 20px;
+  margin-top: 24px;
+  counter-reset: recommend-shelf;
 }
 
 .recommendations-section .recommend-scroll-shell {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 
 .recommendations-section .recommend-scroll-shell .book-list {
   padding-right: 10px;
+}
+
+.recommendations-section .recommend-shelf {
+  position: relative;
+  padding: 22px 22px 20px;
+}
+
+.recommendations-section .recommend-shelf::after {
+  counter-increment: recommend-shelf;
+  content: "书架 " counter(recommend-shelf, decimal-leading-zero);
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(124, 75, 52, 0.46);
+}
+
+.recommendations-section .recommend-shelf:first-child {
+  background:
+    radial-gradient(circle at top right, rgba(124, 75, 52, 0.1), transparent 26%),
+    linear-gradient(180deg, rgba(255, 252, 247, 0.98) 0%, rgba(242, 233, 221, 0.96) 100%);
 }
 
 .recommendations-section .recommend-shelf:first-child .scroll-size-xl {

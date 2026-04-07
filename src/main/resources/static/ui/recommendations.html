@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Recommendations - 图书推荐系统</title>
+  <title>推荐书架 - 图书推荐系统</title>
   <link rel="stylesheet" href="assets/css/common.css" />
   <link rel="stylesheet" href="assets/css/recommendations.css" />
 </head>
@@ -12,21 +12,21 @@
     <main class="page">
       <div class="page-header">
         <div>
-          <h1 class="page-title">My Recommendations</h1>
-          <p class="page-subtitle">Review recommendation shelves grouped by popularity, reading preferences, collaborative signals, and personal activity.</p>
+          <h1 class="page-title">推荐书架</h1>
+          <p class="page-subtitle">从热门趋势、阅读偏好、协同信号和个人行为出发，按书架方式浏览系统给出的推荐结果。</p>
         </div>
       </div>
-      <section class="card">
-        <h2>Recommendation Notes</h2>
-        <p id="recommend-user-copy" class="muted">Current user: <span id="recommend-user">Loading...</span></p>
-        <p id="recommend-window-copy" class="muted">Popular shelves use a behavior-driven window so you can compare how short-term and medium-term activity change the results.</p>
+      <section class="card recommend-intro-card">
+        <h2>推荐说明</h2>
+        <p id="recommend-user-copy" class="muted">当前用户：<span id="recommend-user">加载中...</span></p>
+        <p id="recommend-window-copy" class="muted">热门书架会根据近一段时间的借阅、点击和评分表现动态调整，让你对比短期与中期趋势。</p>
         <div class="form-actions">
           <label class="field" for="recommend-window">
-            <span class="label">Popular Window</span>
+            <span class="label">热门时间窗口</span>
             <select id="recommend-window">
-              <option value="7">Last 7 days</option>
-              <option value="30" selected>Last 30 days</option>
-              <option value="90">Last 90 days</option>
+              <option value="7">近 7 天</option>
+              <option value="30" selected>近 30 天</option>
+              <option value="90">近 90 天</option>
             </select>
           </label>
         </div>

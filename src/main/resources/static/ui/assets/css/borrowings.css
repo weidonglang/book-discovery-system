@@ -1,5 +1,13 @@
 .borrowings-section {
-  margin-top: 18px;
+  margin-top: 22px;
+}
+
+.borrowings-section .page-header {
+  margin-bottom: 14px;
+}
+
+.borrowings-section .page-title {
+  font-family: var(--font-display);
 }
 
 #active-loans.scroll-size-md,

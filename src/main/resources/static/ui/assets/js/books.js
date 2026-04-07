@@ -200,6 +200,92 @@ function buildSearchHitReason(book, payload) {
   return reasons.length ? reasons.join(window.BookI18n.isChinese() ? '；' : '; ') : t('books.reasonFallback');
 }
 
+function findNamesByIds(items, ids, mapper = item => item.name) {
+  const selectedSet = new Set((ids || []).map(String));
+  return (items || [])
+    .filter(item => selectedSet.has(String(item.id)))
+    .map(mapper)
+    .filter(Boolean);
+}
+
+function formatRangeLabel(label, from, to, unit = '') {
+  if (from === null && to === null) return null;
+  if (from !== null && to !== null) {
+    return `${label}${from}-${to}${unit}`;
+  }
+  if (from !== null) {
+    return `${label}${from}${unit} 起`;
+  }
+  return `${label}${to}${unit} 以下`;
+}
+
+function renderActiveFilterSummary(payload, pagination) {
+  const wrap = document.getElementById('active-filter-summary');
+  if (!wrap) return;
+
+  const criteria = payload.criteria || {};
+  const segments = [];
+  const keyword = String(criteria.name || '').trim();
+
+  if (keyword) {
+    segments.push({ label: '关键词', value: keyword });
+  }
+
+  const authorNames = findNamesByIds(allAuthors, criteria.authors, item => item.name);
+  if (authorNames.length) {
+    segments.push({ label: '作者', value: authorNames.join('、') });
+  }
+
+  const categoryNames = findNamesByIds(allCategories, criteria.categories, item => BookUi.localizeCategoryName(item.name));
+  if (categoryNames.length) {
+    segments.push({ label: '分类', value: categoryNames.join('、') });
+  }
+
+  const publisherNames = findNamesByIds(allPublishers, criteria.publishers, item => item.name);
+  if (publisherNames.length) {
+    segments.push({ label: '出版社', value: publisherNames.join('、') });
+  }
+
+  const tagNames = findNamesByIds(allTags, criteria.tags, item => item.name);
+  if (tagNames.length) {
+    segments.push({ label: '标签', value: tagNames.join('、') });
+  }
+
+  const priceRange = formatRangeLabel('价格 ', criteria.fromPrice, criteria.toPrice, ' 元');
+  if (priceRange) segments.push({ label: '区间', value: priceRange });
+
+  const pagesRange = formatRangeLabel('页数 ', criteria.fromPagesNumber, criteria.toPagesNumber, ' 页');
+  if (pagesRange) segments.push({ label: '页数', value: pagesRange });
+
+  const durationRange = formatRangeLabel('时长 ', criteria.fromReadingDuration, criteria.toReadingDuration, ' 分钟');
+  if (durationRange) segments.push({ label: '时长', value: durationRange });
+
+  const sortFieldOption = document.querySelector(`#sortField option[value="${payload.sortingByList?.[0]?.fieldName || 'id'}"]`);
+  const sortDirectionOption = document.querySelector(`#sortDirection option[value="${payload.sortingByList?.[0]?.direction || 'ASC'}"]`);
+  segments.push({
+    label: '排序',
+    value: `${sortFieldOption?.textContent || '图书编号'} · ${sortDirectionOption?.textContent || '升序'}`
+  });
+
+  segments.push({
+    label: '结果',
+    value: pagination ? `${pagination.totalNumberOfElements || 0} 本 / 第 ${pagination.pageNumber || 1} 页` : '等待检索'
+  });
+
+  if (!segments.length) {
+    wrap.classList.add('hidden');
+    wrap.innerHTML = '';
+    return;
+  }
+
+  wrap.classList.remove('hidden');
+  wrap.innerHTML = segments.map(item => `
+    <span class="books-active-label">
+      <strong>${escapeHtml(item.label)}</strong>${escapeHtml(item.value)}
+    </span>
+  `).join('');
+}
+
 async function loadBooks(pageNumber = 1) {
   const target = document.getElementById('book-results');
   target.innerHTML = `<div class="card muted">${escapeHtml(t('books.loading'))}</div>`;
@@ -232,7 +318,13 @@ async function loadBooks(pageNumber = 1) {
         totalElements: pagination.totalNumberOfElements
       });
     document.getElementById('currentPage').value = String(currentPage);
+    renderActiveFilterSummary(payload, pagination);
   } catch (error) {
+    const summary = document.getElementById('active-filter-summary');
+    if (summary) {
+      summary.classList.add('hidden');
+      summary.innerHTML = '';
+    }
     target.innerHTML = `<div class="card">${escapeHtml(t('books.loadFailed', { message: error.message }))}</div>`;
   }
 }

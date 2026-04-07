@@ -1,3 +1,22 @@
 .login-layout {
   align-items: start;
 }
+
+.login-layout .card {
+  overflow: hidden;
+}
+
+.login-layout .card:first-child {
+  background:
+    radial-gradient(circle at top left, rgba(124, 75, 52, 0.12), transparent 35%),
+    linear-gradient(180deg, rgba(255, 250, 244, 0.98) 0%, rgba(244, 235, 223, 0.95) 100%);
+}
+
+.login-layout h2 {
+  font-family: var(--font-display);
+  color: var(--primary-deep);
+}
+
+.login-layout .hero-copy {
+  max-width: 42ch;
+}

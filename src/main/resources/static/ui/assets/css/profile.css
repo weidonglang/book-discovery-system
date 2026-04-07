@@ -1,7 +1,11 @@
 .profile-form {
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
 .profile-reading-note {
-  margin-top: 16px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(124, 75, 52, 0.14);
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(241, 233, 221, 0.94) 100%);
 }

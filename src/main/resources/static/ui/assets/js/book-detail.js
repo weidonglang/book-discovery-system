@@ -48,21 +48,45 @@ document.addEventListener('DOMContentLoaded', async () => {
       ? `${summary.activeReservationsCount} / #${summary.currentUserQueuePosition}`
       : String(summary.activeReservationsCount);
 
-    document.getElementById('detail-meta').innerHTML = [
-      renderInfoItem(t('common.author'), escapeHtml(book.author?.name || t('common.unknownAuthor'))),
-      renderInfoItem(t('common.isbn'), escapeHtml(book.isbn || t('bookDetail.noIsbn'))),
-      renderInfoItem(t('common.category'), escapeHtml(BookUi.localizeCategoryName(book.category?.name))),
-      renderInfoItem(t('common.publisher'), escapeHtml(book.publisher?.name || t('common.noPublisher'))),
-      renderInfoItem(t('common.tags'), escapeHtml(tagNames.length ? tagNames.join(', ') : t('common.noTags'))),
-      renderInfoItem(t('common.rating'), escapeHtml(book.rate ?? '-')),
-      renderInfoItem(t('common.ratingCount'), escapeHtml(book.usersRateCount ?? '-')),
-      renderInfoItem(t('common.price'), escapeHtml(book.price ?? '-')),
-      renderInfoItem(t('common.pages'), escapeHtml(book.pagesNumber ?? '-')),
-      renderInfoItem(t('common.duration'), escapeHtml(book.readingDuration ?? '-')),
-      renderInfoItem(t('common.publishDate'), escapeHtml(BookApi.toDisplayDate(book.publishDate))),
-      renderInfoItem(t('common.availableCopies'), escapeHtml(`${book.availableCopies ?? 0} / ${book.totalCopies ?? 0}`)),
-      renderInfoItem(t('common.queue'), escapeHtml(queueLabel))
-    ].join('');
+    const groups = [
+      {
+        title: window.BookI18n.isChinese() ? '作品信息' : 'Work profile',
+        items: [
+          renderInfoItem(t('common.author'), escapeHtml(book.author?.name || t('common.unknownAuthor'))),
+          renderInfoItem(t('common.isbn'), escapeHtml(book.isbn || t('bookDetail.noIsbn'))),
+          renderInfoItem(t('common.category'), escapeHtml(BookUi.localizeCategoryName(book.category?.name))),
+          renderInfoItem(t('common.publisher'), escapeHtml(book.publisher?.name || t('common.noPublisher'))),
+          renderInfoItem(t('common.tags'), escapeHtml(tagNames.length ? tagNames.join(', ') : t('common.noTags'))),
+          renderInfoItem(t('common.publishDate'), escapeHtml(BookApi.toDisplayDate(book.publishDate)))
+        ]
+      },
+      {
+        title: window.BookI18n.isChinese() ? '阅读参考' : 'Reading reference',
+        items: [
+          renderInfoItem(t('common.rating'), escapeHtml(book.rate ?? '-')),
+          renderInfoItem(t('common.ratingCount'), escapeHtml(book.usersRateCount ?? '-')),
+          renderInfoItem(t('common.pages'), escapeHtml(book.pagesNumber ?? '-')),
+          renderInfoItem(t('common.duration'), escapeHtml(book.readingDuration ?? '-')),
+          renderInfoItem(t('common.price'), escapeHtml(book.price ?? '-'))
+        ]
+      },
+      {
+        title: window.BookI18n.isChinese() ? '流通状态' : 'Availability',
+        items: [
+          renderInfoItem(t('common.availableCopies'), escapeHtml(`${book.availableCopies ?? 0} / ${book.totalCopies ?? 0}`)),
+          renderInfoItem(t('common.queue'), escapeHtml(queueLabel))
+        ]
+      }
+    ];
+
+    document.getElementById('detail-meta').innerHTML = groups.map(group => `
+      <section class="detail-meta-group">
+        <h3 class="detail-meta-group-title">${escapeHtml(group.title)}</h3>
+        <div class="detail-meta-group-body">
+          ${group.items.join('')}
+        </div>
+      </section>
+    `).join('');
   }
 
   function renderButtons(book, activeLoan, summary) {

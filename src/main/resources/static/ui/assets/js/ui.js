@@ -591,7 +591,7 @@
     return `
       <article class="card book-card">
         <div class="book-cover">${renderBookImage(book)}</div>
-        <div>
+        <div class="book-card-head">
           <h3 class="book-title">${escapeHtml(book?.name || t('common.unknownBook'))}</h3>
           <div class="book-meta">${escapeHtml(t('common.author'))}: ${escapeHtml(book?.author?.name || t('common.unknownAuthor'))}</div>
         </div>
@@ -602,7 +602,7 @@
           <span class="tag">${escapeHtml(t('common.pages'))}: ${escapeHtml(book?.pagesNumber ?? '-')}</span>
           <span class="tag">${escapeHtml(t('common.availableCopies'))}: ${escapeHtml(`${availableCopies}/${totalCopies}`)}</span>
         </div>
-        <div class="muted">${escapeHtml(description.slice(0, 100))}${description.length > 100 ? '...' : ''}</div>
+        <div class="book-summary muted">${escapeHtml(description.slice(0, 100))}${description.length > 100 ? '...' : ''}</div>
         ${hitMeta}
         <div class="book-actions">
           <a href="${detailHref}"

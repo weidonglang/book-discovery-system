@@ -74,12 +74,12 @@
         <div class="section-head home-section-head">
           <div>
             <h2>今日主页看板</h2>
-            <div class="muted">把 1-8 这类高频小功能收拢到一屏内，卡片看速览，弹窗看详情。</div>
+            <div class="muted home-section-copy">先把最影响今天阅读节奏的 4 项放在前面，其余状态收进延伸区，首页会更像真正的阅读入口。</div>
           </div>
         </div>
 
-        <div class="insight-grid">
-          <article class="card insight-card accent-blue">
+        <div class="insight-grid insight-grid-primary">
+          <article class="card insight-card insight-card-priority accent-blue">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">1. 连续阅读</span>
@@ -120,7 +120,7 @@
             <div id="recent-viewed-preview" class="compact-list"></div>
           </article>
 
-          <article class="card insight-card accent-mint">
+          <article class="card insight-card insight-card-priority accent-mint">
             <div class="insight-head">
               <div>
                 <span class="panel-kicker">4. 今日推荐一句话</span>
@@ -132,7 +132,16 @@
               <a id="daily-suggestion-link" class="button-link soft" href="recommendations.html">去看看推荐</a>
             </div>
           </article>
+        </div>
 
+        <div class="section-head home-section-head home-section-head-secondary">
+          <div>
+            <h3>延伸状态</h3>
+            <div class="muted">趋势、新书、稍后阅读和目标进度继续放在首页，但不会再抢走首屏重点。</div>
+          </div>
+        </div>
+
+        <div class="insight-grid insight-grid-secondary">
           <article class="card insight-card accent-indigo">
             <div class="insight-head">
               <div>
@@ -199,7 +208,7 @@
         <div class="category-scroll-hint">鼠标悬停在分类区域后，可滚动查看更多分类</div>
       </section>
 
-      <section class="home-preview-section">
+      <section class="home-preview-section home-preview-section-condensed">
         <div class="page-header home-preview-header">
           <div>
             <h2 class="page-title home-preview-title">个性化推荐预览</h2>

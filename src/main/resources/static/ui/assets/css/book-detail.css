@@ -1,16 +1,46 @@
 .detail-layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  gap: 26px;
+  align-items: start;
+}
+
+.detail-page-kicker {
+  margin-bottom: 12px;
+}
+
+.detail-layout > .card:first-child {
+  position: sticky;
+  top: 92px;
+  padding: 22px;
+  background:
+    radial-gradient(circle at top, rgba(124, 75, 52, 0.12), transparent 48%),
+    linear-gradient(180deg, rgba(255, 252, 247, 0.98) 0%, rgba(244, 235, 222, 0.98) 100%);
+}
+
+.detail-layout > .card:last-child {
+  padding: 28px;
+}
+
+.detail-content-card {
+  display: grid;
   gap: 18px;
+}
+
+.detail-copy-lead {
+  margin-bottom: -2px;
 }
 
 .detail-cover {
   width: 100%;
   aspect-ratio: 3 / 4;
-  border-radius: 18px;
-  border: 1px solid var(--border);
+  border-radius: 22px;
+  border: 1px solid rgba(124, 75, 52, 0.18);
   overflow: hidden;
-  background: linear-gradient(135deg, #dbeafe, #eff6ff);
+  background:
+    linear-gradient(160deg, rgba(124, 75, 52, 0.12), rgba(143, 109, 70, 0.06)),
+    linear-gradient(180deg, #f8f2e8 0%, #eee2d1 100%);
+  box-shadow: 0 22px 44px rgba(61, 39, 24, 0.16);
 }
 
 .detail-cover img {
@@ -21,24 +51,153 @@
 
 .detail-cover .book-cover-fallback {
   min-height: 100%;
+  border-radius: 0;
+  background:
+    linear-gradient(145deg, rgba(124, 75, 52, 0.2) 0%, rgba(143, 109, 70, 0.14) 100%);
+}
+
+.detail-cover .book-cover-fallback::after {
+  font-size: 17px;
+  letter-spacing: 0.14em;
+}
+
+.detail-layout h2#detail-title {
+  margin: 0 0 16px;
+  font-size: clamp(30px, 3.5vw, 42px);
+  line-height: 1.16;
+  font-family: var(--font-display);
+  color: var(--primary-deep);
+}
+
+.detail-layout #detail-desc {
+  margin: 0 0 20px;
+  max-width: 60ch;
+  font-size: 16px;
+  line-height: 1.95;
+  color: var(--muted-strong);
+}
+
+.detail-layout #detail-meta {
+  display: grid;
+  gap: 14px;
+}
+
+.detail-layout #detail-meta .detail-meta-group {
+  display: grid;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(124, 75, 52, 0.14);
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(244, 236, 224, 0.92) 100%);
+}
+
+.detail-layout #detail-meta .detail-meta-group-title {
+  margin: 0;
+  font-size: 20px;
+  color: var(--primary-deep);
+}
+
+.detail-layout #detail-meta .detail-meta-group-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.detail-layout #detail-meta .info-item {
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(124, 75, 52, 0.14);
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.96) 0%, rgba(244, 236, 224, 0.92) 100%);
+}
+
+.detail-layout #detail-meta strong {
+  font-family: var(--font-display);
+  color: var(--primary-deep);
+}
+
+.detail-layout .form-actions {
+  gap: 12px;
+}
+
+.detail-action-bar {
+  max-width: 560px;
+  justify-content: flex-end;
+}
+
+.detail-layout .form-actions button,
+.detail-layout .form-actions .button-link {
+  min-width: 132px;
 }
 
 .detail-section {
-  margin-top: 20px;
+  margin-top: 28px;
+}
+
+.detail-section .page-header {
+  margin-bottom: 18px;
 }
 
 .detail-section-title {
-  font-size: 24px;
+  font-size: 30px;
 }
 
-@media (max-width: 980px) {
+#similar-books.recommend-stack,
+#author-books.book-list {
+  margin-top: 0;
+}
+
+#similar-books .recommend-shelf {
+  gap: 16px;
+  padding: 22px;
+}
+
+#author-books.book-list {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+@media (max-width: 1040px) {
   .detail-layout {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .detail-layout > .card:first-child {
+    top: 84px;
+  }
+}
+
+@media (max-width: 860px) {
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-layout > .card:first-child {
+    position: static;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
+  .detail-layout #detail-meta .detail-meta-group-body {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 720px) {
-  .detail-layout {
-    grid-template-columns: 1fr;
+  .detail-layout > .card:first-child,
+  .detail-layout > .card:last-child {
+    padding: 20px;
+  }
+
+  .detail-layout h2#detail-title {
+    font-size: 28px;
+  }
+
+  .detail-layout #detail-desc {
+    font-size: 15px;
+    line-height: 1.82;
+  }
+
+  .detail-section-title {
+    font-size: 25px;
   }
 }

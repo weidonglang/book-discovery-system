@@ -316,7 +316,10 @@ mvnw-jdk11.cmd spring-boot:run
 - 为前端页面加入更完整的国际化和状态反馈
 
 ## 贡献说明
-
+'
+This project is developed based on / inspired by henry-azer/book-recommendation-system.
+On top of the original project, I extended the system with borrowing, returning, renewal, reservation queue, admin management, deployment scripts, and improved project documentation.
+'
 欢迎任何形式的贡献，包括但不限于：
 
 - 提交 Issue

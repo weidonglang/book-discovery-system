@@ -1,11 +1,17 @@
 package com.weidonglang.NewBookRecommendationSystem.service;
 
+import com.weidonglang.NewBookRecommendationSystem.dto.SearchLogRecordDto;
 import com.weidonglang.NewBookRecommendationSystem.enums.UserBehaviorActionType;
 public interface UserBehaviorLogService {
     void record(UserBehaviorActionType actionType, Long bookId, String keyword, String source, String reason);
 
+    void recordSearch(SearchLogRecordDto searchLogRecordDto);
+
     default void recordSearch(String keyword, String source, String reason) {
-        record(UserBehaviorActionType.SEARCH, null, keyword, source, reason);
+        recordSearch(new SearchLogRecordDto(keyword, source, reason,
+                null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null, null, null));
     }
 
     default void recordBookDetailClick(Long bookId, String source, String reason) {

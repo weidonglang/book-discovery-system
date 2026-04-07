@@ -63,7 +63,7 @@ function formatDateTime(value) {
   if (!value) return '-';
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleString('zh-CN');
+  return date.toLocaleString(window.BookI18n.getLocale());
 }
 
 function formatUserName(user) {
@@ -141,14 +141,145 @@ function renderAdminReservationItem(reservation) {
     </article>`;
 }
 
+function formatBehaviorAction(actionType) {
+  switch (actionType) {
+    case 'SEARCH':
+      return 'Search';
+    case 'BOOK_DETAIL_CLICK':
+      return 'Detail Click';
+    case 'RECOMMENDATION_CLICK':
+      return 'Recommendation Click';
+    case 'RATE_BOOK':
+      return 'Rate Book';
+    case 'BORROW_BOOK':
+      return 'Borrow Book';
+    default:
+      return actionType || 'Unknown';
+  }
+}
+
+function renderKeywordStatItem(item, index) {
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <div>
+          <span class="compact-rank">${index + 1}</span>
+          <strong>${escapeHtml(item.keyword || 'Unnamed keyword')}</strong>
+        </div>
+        <span class="tag">${escapeHtml(item.count ?? 0)} hits</span>
+      </div>
+    </article>`;
+}
+
+function renderBookStatItem(item, index, metricLabel) {
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <div>
+          <span class="compact-rank">${index + 1}</span>
+          <strong>${escapeHtml(item.bookName || 'Untitled book')}</strong>
+        </div>
+        <span class="tag">${escapeHtml(item.count ?? 0)} ${escapeHtml(metricLabel)}</span>
+      </div>
+      <div class="muted">#${escapeHtml(item.bookId ?? '-')}</div>
+    </article>`;
+}
+
+function renderNamedCountItem(item, index) {
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <div>
+          <span class="compact-rank">${index + 1}</span>
+          <strong>${escapeHtml(item.name || 'Unnamed')}</strong>
+        </div>
+        <span class="tag">${escapeHtml(item.count ?? 0)} hits</span>
+      </div>
+      <div class="muted">#${escapeHtml(item.id ?? '-')}</div>
+    </article>`;
+}
+
+function renderRecommendationStrategy(strategy, recentDaysApplied) {
+  if (!strategy) {
+    return '<div class="muted">No recommendation model metadata available.</div>';
+  }
+  const windowLabel = recentDaysApplied ? `Last ${recentDaysApplied} days` : 'All recorded activity';
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <strong>Behavior-driven popularity model</strong>
+        <span class="tag">${escapeHtml(windowLabel)}</span>
+      </div>
+      <div class="strategy-line">
+        <span class="tag">Borrows x ${escapeHtml(strategy.borrowWeight ?? 0)}</span>
+        <span class="tag">Detail Clicks x ${escapeHtml(strategy.detailClickWeight ?? 0)}</span>
+        <span class="tag">Ratings x ${escapeHtml(strategy.ratingWeight ?? 0)}</span>
+      </div>
+      <div class="muted">${escapeHtml(strategy.formula || '')}</div>
+      <div class="muted">${escapeHtml(strategy.fallbackRule || '')}</div>
+    </article>`;
+}
+
+function buildSearchDetailLines(item) {
+  const details = [];
+  if (item.resultCount !== null && item.resultCount !== undefined) {
+    details.push(`results=${item.resultCount}`);
+  }
+  if (item.categoryIds) details.push(`categories=${item.categoryIds}`);
+  if (item.authorIds) details.push(`authors=${item.authorIds}`);
+  if (item.publisherIds) details.push(`publishers=${item.publisherIds}`);
+  if (item.tagIds) details.push(`tags=${item.tagIds}`);
+  if (item.fromPrice !== null || item.toPrice !== null) {
+    details.push(`price=${item.fromPrice ?? '-'}-${item.toPrice ?? '-'}`);
+  }
+  if (item.fromPagesNumber !== null || item.toPagesNumber !== null) {
+    details.push(`pages=${item.fromPagesNumber ?? '-'}-${item.toPagesNumber ?? '-'}`);
+  }
+  if (item.fromReadingDuration !== null || item.toReadingDuration !== null) {
+    details.push(`duration=${item.fromReadingDuration ?? '-'}-${item.toReadingDuration ?? '-'}`);
+  }
+  if (item.sortBy) details.push(`sort=${item.sortBy}`);
+  if (item.pageNumber !== null && item.pageNumber !== undefined) details.push(`page=${item.pageNumber}`);
+  if (item.pageSize !== null && item.pageSize !== undefined) details.push(`size=${item.pageSize}`);
+  return details;
+}
+
+function renderSearchLogItem(item) {
+  const detailLines = buildSearchDetailLines(item);
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <strong>${escapeHtml(item.keyword || 'browse-books')}</strong>
+        <span class="tag">${escapeHtml(formatDateTime(item.createdDate))}</span>
+      </div>
+      <div class="muted">${escapeHtml(item.userEmail || 'Anonymous user')}</div>
+      ${detailLines.length ? `<div class="muted">${escapeHtml(detailLines.join(' | '))}</div>` : ''}
+      <div class="muted">${escapeHtml(item.reason || 'No extra reason provided.')}</div>
+    </article>`;
+}
+
+function renderBehaviorLogItem(item) {
+  return `
+    <article class="admin-item">
+      <div class="compact-item-title">
+        <strong>${escapeHtml(formatBehaviorAction(item.actionType))}</strong>
+        <span class="tag">${escapeHtml(formatDateTime(item.createdDate))}</span>
+      </div>
+      <div class="muted">${escapeHtml(item.userEmail || 'Anonymous user')}</div>
+      <div class="muted">${escapeHtml(item.bookName || item.keyword || 'No linked book or keyword')}</div>
+      <div class="muted">${escapeHtml(item.reason || item.source || 'No extra context')}</div>
+    </article>`;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = window.BookI18n.t;
   if (!BookUi.requireLogin()) return;
   BookUi.injectLayout();
 
   try {
     const currentUser = await BookApi.fetchCurrentUser();
     if (!currentUser || currentUser.role !== 'ADMIN') {
-      BookUi.showMessage('admin-message', 'error', '只有管理员可以访问后台管理页面。');
+      BookUi.showMessage('admin-message', 'error', t('admin.adminOnly'));
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 800);
@@ -182,6 +313,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   const adminLoanHistory = document.getElementById('admin-loan-history');
   const adminActiveReservations = document.getElementById('admin-active-reservations');
   const adminReservationHistory = document.getElementById('admin-reservation-history');
+  const analyticsSummary = document.getElementById('admin-analytics-summary');
+  const recommendationStrategyList = document.getElementById('admin-recommendation-strategy');
+  const topKeywordsList = document.getElementById('admin-top-keywords');
+  const topCategoriesList = document.getElementById('admin-top-categories');
+  const topAuthorsList = document.getElementById('admin-top-authors');
+  const topTagsList = document.getElementById('admin-top-tags');
+  const topPublishersList = document.getElementById('admin-top-publishers');
+  const topClickedBooksList = document.getElementById('admin-top-clicked-books');
+  const topBorrowedBooksList = document.getElementById('admin-top-borrowed-books');
+  const recentSearchesList = document.getElementById('admin-recent-searches');
+  const recentBehaviorList = document.getElementById('admin-recent-behavior');
+  const analyticsWindowSelect = document.getElementById('analytics-window');
   const totalCopiesInput = document.getElementById('book-total-copies');
   const availableCopiesInput = document.getElementById('book-available-copies');
   const authorSelect = document.getElementById('book-author');
@@ -664,6 +807,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     authors = BookApi.parsePaginationResult(response).list;
     renderAuthorOptions();
     renderAuthorList();
+    BookUi.refreshScrollShells(document);
   }
 
   async function loadBooks() {
@@ -673,6 +817,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     books = BookApi.parsePaginationResult(response).list;
     renderBookList();
+    BookUi.refreshScrollShells(document);
   }
 
   async function loadPublishers() {
@@ -687,6 +832,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     tags = Array.isArray(response?.body) ? response.body : [];
     renderTagOptions();
     renderTagList();
+    BookUi.refreshScrollShells(document);
   }
 
   async function loadCirculation() {
@@ -719,6 +865,99 @@ document.addEventListener('DOMContentLoaded', async () => {
     adminReservationHistory.innerHTML = reservationHistory.length
       ? reservationHistory.map(reservation => renderAdminReservationItem(reservation)).join('')
       : '<div class="muted">暂无预约历史记录。</div>';
+    BookUi.refreshScrollShells(document);
+  }
+
+  async function loadAnalytics() {
+    analyticsSummary.innerHTML = '<div class="analytics-stat"><span class="muted">Loading summary...</span></div>';
+    recommendationStrategyList.innerHTML = '<div class="muted">Loading recommendation model...</div>';
+    topKeywordsList.innerHTML = '<div class="muted">Loading top keywords...</div>';
+    topCategoriesList.innerHTML = '<div class="muted">Loading top categories...</div>';
+    topAuthorsList.innerHTML = '<div class="muted">Loading top authors...</div>';
+    topTagsList.innerHTML = '<div class="muted">Loading top tags...</div>';
+    topPublishersList.innerHTML = '<div class="muted">Loading top publishers...</div>';
+    topClickedBooksList.innerHTML = '<div class="muted">Loading clicked books...</div>';
+    topBorrowedBooksList.innerHTML = '<div class="muted">Loading borrowed books...</div>';
+    recentSearchesList.innerHTML = '<div class="muted">Loading recent searches...</div>';
+    recentBehaviorList.innerHTML = '<div class="muted">Loading recent behavior...</div>';
+
+    const selectedWindow = analyticsWindowSelect?.value ? Number(analyticsWindowSelect.value) : null;
+    const query = selectedWindow ? `?limit=5&recentDays=${selectedWindow}` : '?limit=5';
+    const response = await BookApi.apiRequest(`/api/behavior-log/dashboard${query}`);
+    const dashboard = response?.body || {};
+    const recentDaysApplied = dashboard.recentDaysApplied ?? selectedWindow;
+    const windowLabel = recentDaysApplied ? `last ${recentDaysApplied} days` : 'all recorded activity';
+
+    const summaryCards = [
+      {
+        label: 'Total Behavior Events',
+        value: dashboard.totalBehaviorEvents ?? 0,
+        note: 'Across tracked search, click, rating, and borrowing actions'
+      },
+      {
+        label: 'Recent Searches',
+        value: dashboard.recentSearchCount ?? 0,
+        note: `Queries recorded in ${windowLabel}`
+      },
+      {
+        label: 'Recent Detail Clicks',
+        value: dashboard.recentDetailClickCount ?? 0,
+        note: `Book detail visits recorded in ${windowLabel}`
+      },
+      {
+        label: 'Recent Borrows',
+        value: dashboard.recentBorrowCount ?? 0,
+        note: `Borrowing activity recorded in ${windowLabel}`
+      }
+    ];
+
+    analyticsSummary.innerHTML = summaryCards.map(card => `
+      <article class="analytics-stat">
+        <span class="muted">${escapeHtml(card.label)}</span>
+        <strong>${escapeHtml(card.value ?? 0)}</strong>
+        <span class="muted">${escapeHtml(card.note)}</span>
+      </article>
+    `).join('');
+
+    const topKeywords = Array.isArray(dashboard.topKeywords) ? dashboard.topKeywords : [];
+    const topCategories = Array.isArray(dashboard.topCategories) ? dashboard.topCategories : [];
+    const topAuthors = Array.isArray(dashboard.topAuthors) ? dashboard.topAuthors : [];
+    const topTags = Array.isArray(dashboard.topTags) ? dashboard.topTags : [];
+    const topPublishers = Array.isArray(dashboard.topPublishers) ? dashboard.topPublishers : [];
+    const topClickedBooks = Array.isArray(dashboard.topClickedBooks) ? dashboard.topClickedBooks : [];
+    const topBorrowedBooks = Array.isArray(dashboard.topBorrowedBooks) ? dashboard.topBorrowedBooks : [];
+    const recentSearches = Array.isArray(dashboard.recentSearchLogs) ? dashboard.recentSearchLogs : [];
+    const recentBehavior = Array.isArray(dashboard.recentBehaviorLogs) ? dashboard.recentBehaviorLogs : [];
+
+    recommendationStrategyList.innerHTML = renderRecommendationStrategy(dashboard.recommendationStrategy, recentDaysApplied);
+    topKeywordsList.innerHTML = topKeywords.length
+      ? topKeywords.map((item, index) => renderKeywordStatItem(item, index)).join('')
+      : '<div class="muted">No keyword activity has been recorded yet.</div>';
+    topCategoriesList.innerHTML = topCategories.length
+      ? topCategories.map((item, index) => renderNamedCountItem(item, index)).join('')
+      : '<div class="muted">No category search activity has been recorded yet.</div>';
+    topAuthorsList.innerHTML = topAuthors.length
+      ? topAuthors.map((item, index) => renderNamedCountItem(item, index)).join('')
+      : '<div class="muted">No author search activity has been recorded yet.</div>';
+    topTagsList.innerHTML = topTags.length
+      ? topTags.map((item, index) => renderNamedCountItem(item, index)).join('')
+      : '<div class="muted">No tag search activity has been recorded yet.</div>';
+    topPublishersList.innerHTML = topPublishers.length
+      ? topPublishers.map((item, index) => renderNamedCountItem(item, index)).join('')
+      : '<div class="muted">No publisher search activity has been recorded yet.</div>';
+    topClickedBooksList.innerHTML = topClickedBooks.length
+      ? topClickedBooks.map((item, index) => renderBookStatItem(item, index, 'clicks')).join('')
+      : '<div class="muted">No detail click activity has been recorded yet.</div>';
+    topBorrowedBooksList.innerHTML = topBorrowedBooks.length
+      ? topBorrowedBooks.map((item, index) => renderBookStatItem(item, index, 'borrows')).join('')
+      : '<div class="muted">No borrowing activity has been recorded yet.</div>';
+    recentSearchesList.innerHTML = recentSearches.length
+      ? recentSearches.map(item => renderSearchLogItem(item)).join('')
+      : '<div class="muted">No search logs have been recorded yet.</div>';
+    recentBehaviorList.innerHTML = recentBehavior.length
+      ? recentBehavior.map(item => renderBehaviorLogItem(item)).join('')
+      : '<div class="muted">No behavior logs have been recorded yet.</div>';
+    BookUi.refreshScrollShells(document);
   }
 
   bookForm.addEventListener('submit', async event => {
@@ -879,9 +1118,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('reload-publishers').addEventListener('click', () => loadPublishers().catch(error => BookUi.showMessage('admin-message', 'error', error.message)));
   document.getElementById('reload-tags').addEventListener('click', () => loadTags().catch(error => BookUi.showMessage('admin-message', 'error', error.message)));
   document.getElementById('reload-circulation').addEventListener('click', () => loadCirculation().catch(error => BookUi.showMessage('admin-message', 'error', error.message)));
+  document.getElementById('reload-analytics').addEventListener('click', () => loadAnalytics().catch(error => BookUi.showMessage('admin-message', 'error', error.message)));
+  analyticsWindowSelect.addEventListener('change', () => loadAnalytics().catch(error => BookUi.showMessage('admin-message', 'error', error.message)));
 
   try {
-    await Promise.all([loadCategories(), loadAuthors(), loadBooks(), loadPublishers(), loadTags(), loadCirculation()]);
+    await Promise.all([loadCategories(), loadAuthors(), loadBooks(), loadPublishers(), loadTags(), loadCirculation(), loadAnalytics()]);
     resetBookForm();
     resetAuthorForm();
     resetCategoryForm();

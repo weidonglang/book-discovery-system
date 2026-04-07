@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>首页 - 新书推荐系统</title>
+  <title>首页 - 图书推荐系统</title>
   <link rel="stylesheet" href="assets/css/common.css" />
   <link rel="stylesheet" href="assets/css/index.css" />
 </head>
@@ -15,10 +15,10 @@
       <section class="home-hero">
         <article class="card home-splash">
           <div class="hero-badge">个性化阅读发现</div>
-          <h1 class="hero-title">发现下一本值得阅读的书，从推荐、分类与检索开始</h1>
+          <h1 class="hero-title">从推荐、趋势、收藏与提醒开始，快速进入今天的阅读状态。</h1>
           <p class="hero-copy">
-            这里汇集了热门图书、阅读偏好匹配和分类探索入口，
-            方便你快速进入感兴趣的内容，再继续查看图书详情、评分与借阅信息。
+            首页会同时展示你的推荐预览、借阅提醒、近期浏览、热门趋势和新上架图书。
+            需要展开时，直接用弹窗查看完整内容，不必频繁跳页。
           </p>
 
           <form id="quick-search-form" class="inline-search">
@@ -27,70 +27,176 @@
           </form>
 
           <div class="hero-actions">
-            <a class="button-link primary" href="recommendations.html">查看完整推荐页</a>
+            <a class="button-link primary" href="recommendations.html">查看完整推荐</a>
             <a class="button-link" href="books.html">进入图书检索</a>
+            <a class="button-link soft" href="borrowings.html">查看借阅记录</a>
           </div>
         </article>
-
         <article class="card home-overview-card">
           <div class="panel-kicker">欢迎回来</div>
           <h2 id="home-user-name">正在加载首页信息</h2>
           <p id="home-user-copy" class="muted">
-            系统会根据你的评分、借阅和阅读偏好，自动整理推荐预览。
+            系统会根据你的评分、借阅、搜索与浏览行为，整理出一组适合从首页直接继续的内容。
           </p>
           <div id="home-summary-stats" class="home-stat-grid"></div>
         </article>
+      </section>
 
-        <article class="card home-explore-card">
-          <div class="panel-kicker">探索方式</div>
-          <div class="home-explore-grid">
-            <div class="home-explore-item">
-              <strong>从推荐开始</strong>
-              <span>先看热门、偏好匹配与相似图书，快速进入重点内容。</span>
+      <section class="home-focus-section">
+        <article class="card home-focus-card">
+          <div class="panel-kicker">此刻信息</div>
+          <div class="home-focus-grid">
+            <div class="focus-tile">
+              <span class="focus-label">当前时间</span>
+              <strong id="home-live-time">--:--</strong>
+              <span id="home-live-date" class="focus-copy">正在加载日期</span>
             </div>
-            <div class="home-explore-item">
-              <strong>从分类开始</strong>
-              <span>按题材进入图书列表，更适合连续浏览同类图书。</span>
+            <div class="focus-tile">
+              <span class="focus-label">当前位置天气</span>
+              <div class="weather-widget">
+                <div id="home-weather-icon" class="weather-icon weather-neutral">⛅</div>
+                <div class="weather-text-group">
+                  <strong id="home-weather-text">正在获取</strong>
+                  <span id="home-weather-copy" class="focus-copy">若浏览器允许定位，将自动显示实时天气。</span>
+                </div>
+              </div>
             </div>
-            <div class="home-explore-item">
-              <strong>从检索开始</strong>
-              <span>用关键词、作者、标签与出版社进一步缩小范围。</span>
-            </div>
-            <div class="home-explore-item">
-              <strong>从借阅开始</strong>
-              <span>查看当前借阅、续借与预约记录，继续回到图书详情页浏览。</span>
+            <div class="focus-tile focus-tile-wide">
+              <span class="focus-label">阅读建议</span>
+              <strong id="home-reading-tip-title">正在生成</strong>
+              <span id="home-reading-tip-copy" class="focus-copy">系统会根据当前时间与近期状态，给出一条轻量的阅读建议。</span>
             </div>
           </div>
         </article>
+      </section>
 
-        <article class="card demo-route-card">
-          <div class="panel-kicker">常用入口</div>
-          <div class="demo-route-list">
-            <a class="demo-route-item" href="recommendations.html">
-              <strong>推荐总览</strong>
-              <span>查看完整推荐书架，快速浏览热门、偏好匹配和相似图书。</span>
-            </a>
-            <a class="demo-route-item" href="books.html">
-              <strong>图书检索</strong>
-              <span>按关键词、作者、分类、出版社和标签继续筛选图书。</span>
-            </a>
-            <a class="demo-route-item" href="borrowings.html">
-              <strong>借阅与预约</strong>
-              <span>查看当前借阅、历史记录以及预约与续借信息。</span>
-            </a>
+      <section class="home-insight-section">
+        <div class="section-head home-section-head">
+          <div>
+            <h2>今日主页看板</h2>
+            <div class="muted">把 1-8 这类高频小功能收拢到一屏内，卡片看速览，弹窗看详情。</div>
           </div>
-        </article>
+        </div>
+
+        <div class="insight-grid">
+          <article class="card insight-card accent-blue">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">1. 连续阅读</span>
+                <h3>保持你的阅读节奏</h3>
+              </div>
+            </div>
+            <div class="metric-row">
+              <strong id="reading-streak-days">0</strong>
+              <span>天</span>
+            </div>
+            <p id="reading-streak-copy" class="muted">最近还没有形成连续阅读记录。</p>
+          </article>
+
+          <article class="card insight-card accent-amber">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">2. 到期提醒</span>
+                <h3>先处理最紧急的借阅</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="due">查看详情</button>
+            </div>
+            <div class="metric-row compact">
+              <strong id="due-reminder-count">0</strong>
+              <span>条提醒</span>
+            </div>
+            <p id="due-reminder-copy" class="muted">暂无临近到期或已逾期的图书。</p>
+            <div id="due-reminder-preview" class="compact-list"></div>
+          </article>
+
+          <article class="card insight-card accent-cyan">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">3. 最近浏览</span>
+                <h3>从上次停下的位置继续</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="recent">查看详情</button>
+            </div>
+            <div id="recent-viewed-preview" class="compact-list"></div>
+          </article>
+
+          <article class="card insight-card accent-mint">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">4. 今日推荐一句话</span>
+                <h3 id="daily-suggestion-title">正在生成今日建议</h3>
+              </div>
+            </div>
+            <p id="daily-suggestion-copy" class="muted">稍后会根据你的节奏、偏好和当前时段，给出一条更具体的阅读建议。</p>
+            <div class="hero-actions compact">
+              <a id="daily-suggestion-link" class="button-link soft" href="recommendations.html">去看看推荐</a>
+            </div>
+          </article>
+
+          <article class="card insight-card accent-indigo">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">5. 热门趋势</span>
+                <h3>大家最近都在搜什么</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="trend">查看详情</button>
+            </div>
+            <div id="trend-keywords" class="chip-list"></div>
+            <div id="trend-categories" class="chip-list secondary"></div>
+          </article>
+
+          <article class="card insight-card accent-rose">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">6. 新书上架</span>
+                <h3>刚加入系统的图书</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="new-arrivals">查看详情</button>
+            </div>
+            <div id="new-arrivals-preview" class="compact-list"></div>
+          </article>
+
+          <article class="card insight-card accent-slate">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">7. 稍后阅读</span>
+                <h3>给自己留一个待看清单</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="saved">管理清单</button>
+            </div>
+            <div class="metric-row compact">
+              <strong id="saved-books-count">0</strong>
+              <span>本待看</span>
+            </div>
+            <div id="saved-books-preview" class="compact-list"></div>
+          </article>
+
+          <article class="card insight-card accent-green">
+            <div class="insight-head">
+              <div>
+                <span class="panel-kicker">8. 阅读目标</span>
+                <h3>本月进度</h3>
+              </div>
+              <button type="button" class="action-link soft" data-modal-open="goal">设置目标</button>
+            </div>
+            <div id="goal-progress-summary" class="goal-summary"></div>
+            <div id="goal-progress-bars" class="goal-progress-stack"></div>
+          </article>
+        </div>
       </section>
 
       <section class="card home-category-section">
         <div class="section-head home-section-head">
           <div>
             <h2>按分类探索图书</h2>
-            <div class="muted">从题材出发快速进入图书列表，继续查看筛选、详情与推荐结果。</div>
+            <div class="muted">从题材出发快速进入图书列表，继续筛选、查看详情与推荐结果。</div>
           </div>
           <a class="button-link" href="books.html">查看全部图书</a>
         </div>
-        <div id="category-list" class="category-grid"></div>
+        <div class="category-scroll-shell">
+          <div id="category-list" class="category-grid"></div>
+        </div>
+        <div class="category-scroll-hint">鼠标悬停在分类区域后，可滚动查看更多分类</div>
       </section>
 
       <section class="home-preview-section">
@@ -98,7 +204,7 @@
           <div>
             <h2 class="page-title home-preview-title">个性化推荐预览</h2>
             <p class="page-subtitle">
-              先在首页查看重点推荐和代表性书架，再进入完整推荐页浏览更多内容。
+              先在首页看重点推荐和代表性书架，再进入完整推荐页浏览更多内容。
             </p>
           </div>
           <div class="hero-actions compact">
@@ -111,38 +217,44 @@
           <aside class="home-side-column">
             <section id="recommend-summary" class="card recommend-summary-card"></section>
             <section class="card side-widget-card">
-              <div class="panel-kicker">此刻信息</div>
-              <div class="side-widget-stack">
-                <div class="mini-widget">
-                  <span class="mini-widget-label">当前时间</span>
-                  <strong id="home-live-time">--:--</strong>
-                  <span id="home-live-date" class="mini-widget-copy">正在加载日期</span>
-                </div>
-                <div class="mini-widget">
-                  <span class="mini-widget-label">当前位置天气</span>
-                  <div class="weather-widget">
-                    <div id="home-weather-icon" class="weather-icon weather-neutral">⛅</div>
-                    <div class="weather-text-group">
-                      <strong id="home-weather-text">正在获取</strong>
-                      <span id="home-weather-copy" class="mini-widget-copy">若浏览器允许定位，将自动显示实时天气。</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="mini-widget">
-                  <span class="mini-widget-label">阅读建议</span>
-                  <strong id="home-reading-tip-title">正在生成</strong>
-                  <span id="home-reading-tip-copy" class="mini-widget-copy">系统会根据当前时间给出一个轻量阅读建议。</span>
-                </div>
+              <div class="panel-kicker">快捷入口</div>
+              <div class="quick-entry-list">
+                <a class="quick-entry-item" href="recommendations.html">
+                  <strong>推荐总览</strong>
+                  <span>查看完整推荐书架与个性化结果。</span>
+                </a>
+                <a class="quick-entry-item" href="books.html">
+                  <strong>图书检索</strong>
+                  <span>按关键词、分类、作者或标签继续细筛。</span>
+                </a>
+                <a class="quick-entry-item" href="borrowings.html">
+                  <strong>借阅与预约</strong>
+                  <span>处理续借、归还和预约队列。</span>
+                </a>
               </div>
             </section>
           </aside>
           <div id="recommend-list" class="recommend-stack home-recommend-stack"></div>
         </div>
       </section>
+
+      <div id="home-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="home-modal-title">
+        <div class="modal-panel">
+          <div class="modal-header">
+            <div>
+              <h3 id="home-modal-title">详情</h3>
+              <div id="home-modal-subtitle" class="muted"></div>
+            </div>
+            <button id="home-modal-close" class="modal-close" type="button" aria-label="关闭">×</button>
+          </div>
+          <div id="home-modal-body" class="modal-body"></div>
+        </div>
+      </div>
     </main>
   </div>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/ui.js"></script>
   <script src="assets/js/index.js"></script>
 </body>

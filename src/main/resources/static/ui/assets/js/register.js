@@ -1,20 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const t = window.BookI18n.t;
   if (BookUi.redirectIfLoggedIn()) return;
   BookUi.injectLayout();
 
   const genderSelect = document.getElementById('gender');
   const maritalSelect = document.getElementById('maritalStatus');
   [
-    { value: 'MALE', label: '男' },
-    { value: 'FEMALE', label: '女' },
-    { value: 'OTHERS', label: '其他' }
+    { value: 'MALE', label: t('common.genderMale') },
+    { value: 'FEMALE', label: t('common.genderFemale') },
+    { value: 'OTHERS', label: t('common.genderOther') }
   ].forEach(option => {
     genderSelect.insertAdjacentHTML('beforeend', `<option value="${option.value}">${option.label}</option>`);
   });
   [
-    { value: 'SINGLE', label: '未婚' },
-    { value: 'MARRIED', label: '已婚' },
-    { value: 'IN_RELATIONSHIP', label: '恋爱中' }
+    { value: 'SINGLE', label: t('common.maritalSingle') },
+    { value: 'MARRIED', label: t('common.maritalMarried') },
+    { value: 'IN_RELATIONSHIP', label: t('common.maritalRelationship') }
   ].forEach(option => {
     maritalSelect.insertAdjacentHTML('beforeend', `<option value="${option.value}">${option.label}</option>`);
   });
@@ -31,10 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
       BookUi.showMessage(
         'register-message',
         exists ? 'warning' : 'info',
-        exists ? '该邮箱已经被注册。' : '该邮箱当前可以使用。'
+        exists ? t('register.emailExists') : t('register.emailAvailable')
       );
     } catch (error) {
-      BookUi.showMessage('register-message', 'warning', `邮箱校验失败：${error.message}`);
+      BookUi.showMessage('register-message', 'warning', t('register.emailCheckFailed', { message: error.message }));
     }
   });
 
@@ -62,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         auth: false,
         body: payload
       });
-      BookUi.showMessage('register-message', 'success', '注册成功，正在跳转到登录页。');
+      BookUi.showMessage('register-message', 'success', t('register.success'));
       setTimeout(() => {
         window.location.href = `login.html?email=${encodeURIComponent(payload.email)}`;
       }, 800);

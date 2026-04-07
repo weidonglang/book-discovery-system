@@ -16,6 +16,7 @@ function renderInfoItem(label, value) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = window.BookI18n.t;
   if (!BookUi.requireLogin()) return;
   BookUi.injectLayout();
 
@@ -27,9 +28,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   const reserveButton = document.getElementById('reserve-book-btn');
   const cancelReservationButton = document.getElementById('cancel-reservation-btn');
   const similarBooksWrap = document.getElementById('similar-books');
+  const authorBooksWrap = document.getElementById('author-books');
 
   if (!id) {
-    BookUi.showMessage('detail-message', 'error', '缺少图书 ID 参数。');
+    BookUi.showMessage('detail-message', 'error', t('bookDetail.missingId'));
     return;
   }
 
@@ -43,65 +45,66 @@ document.addEventListener('DOMContentLoaded', async () => {
   function renderMeta(book, summary) {
     const tagNames = (book.tags || []).map(tag => tag.name).filter(Boolean);
     const queueLabel = summary.currentUserHasActiveReservation
-      ? `${summary.activeReservationsCount} 个预约，你当前排第 ${summary.currentUserQueuePosition} 位`
-      : `${summary.activeReservationsCount} 个预约`;
+      ? `${summary.activeReservationsCount} / #${summary.currentUserQueuePosition}`
+      : String(summary.activeReservationsCount);
 
     document.getElementById('detail-meta').innerHTML = [
-      renderInfoItem('作者', escapeHtml(book.author?.name || '未知作者')),
-      renderInfoItem('ISBN', escapeHtml(book.isbn || '暂无 ISBN')),
-      renderInfoItem('分类', escapeHtml(BookUi.localizeCategoryName(book.category?.name))),
-      renderInfoItem('出版社', escapeHtml(book.publisher?.name || '无出版社')),
-      renderInfoItem('标签', escapeHtml(tagNames.length ? tagNames.join(', ') : '暂无标签')),
-      renderInfoItem('评分', escapeHtml(book.rate ?? '-')),
-      renderInfoItem('评分人数', escapeHtml(book.usersRateCount ?? '-')),
-      renderInfoItem('价格', escapeHtml(book.price ?? '-')),
-      renderInfoItem('页数', escapeHtml(book.pagesNumber ?? '-')),
-      renderInfoItem('阅读时长', escapeHtml(book.readingDuration ?? '-')),
-      renderInfoItem('出版日期', escapeHtml(BookApi.toDisplayDate(book.publishDate))),
-      renderInfoItem('可借库存', escapeHtml(`${book.availableCopies ?? 0} / ${book.totalCopies ?? 0}`)),
-      renderInfoItem('预约队列', escapeHtml(queueLabel))
+      renderInfoItem(t('common.author'), escapeHtml(book.author?.name || t('common.unknownAuthor'))),
+      renderInfoItem(t('common.isbn'), escapeHtml(book.isbn || t('bookDetail.noIsbn'))),
+      renderInfoItem(t('common.category'), escapeHtml(BookUi.localizeCategoryName(book.category?.name))),
+      renderInfoItem(t('common.publisher'), escapeHtml(book.publisher?.name || t('common.noPublisher'))),
+      renderInfoItem(t('common.tags'), escapeHtml(tagNames.length ? tagNames.join(', ') : t('common.noTags'))),
+      renderInfoItem(t('common.rating'), escapeHtml(book.rate ?? '-')),
+      renderInfoItem(t('common.ratingCount'), escapeHtml(book.usersRateCount ?? '-')),
+      renderInfoItem(t('common.price'), escapeHtml(book.price ?? '-')),
+      renderInfoItem(t('common.pages'), escapeHtml(book.pagesNumber ?? '-')),
+      renderInfoItem(t('common.duration'), escapeHtml(book.readingDuration ?? '-')),
+      renderInfoItem(t('common.publishDate'), escapeHtml(BookApi.toDisplayDate(book.publishDate))),
+      renderInfoItem(t('common.availableCopies'), escapeHtml(`${book.availableCopies ?? 0} / ${book.totalCopies ?? 0}`)),
+      renderInfoItem(t('common.queue'), escapeHtml(queueLabel))
     ].join('');
   }
 
   function renderButtons(book, activeLoan, summary) {
     if (activeLoan) {
-      setButtonState(borrowButton, true, `已借阅，归还截止 ${BookApi.toDisplayDate(activeLoan.dueDate)}`, true);
-      setButtonState(reserveButton, false, '预约图书', true);
-      setButtonState(cancelReservationButton, false, '取消预约', true);
+      setButtonState(borrowButton, true, `${t('bookDetail.borrow')} (${BookApi.toDisplayDate(activeLoan.dueDate)})`, true);
+      setButtonState(reserveButton, false, t('bookDetail.reserve'), true);
+      setButtonState(cancelReservationButton, false, t('bookDetail.cancelReservation'), true);
       return;
     }
 
     if (summary.currentUserHasActiveReservation) {
-      setButtonState(cancelReservationButton, true, `取消预约（第 ${summary.currentUserQueuePosition} 位）`, false);
+      setButtonState(cancelReservationButton, true, `${t('bookDetail.cancelReservation')} (#${summary.currentUserQueuePosition})`, false);
       if (summary.currentUserIsFirstInQueue && Number(book.availableCopies || 0) > 0) {
-        setButtonState(borrowButton, true, '借阅已预约图书', false);
+        setButtonState(borrowButton, true, t('bookDetail.borrow'), false);
       } else {
-        setButtonState(borrowButton, true, '等待可借库存', true);
+        setButtonState(borrowButton, true, t('common.unavailable'), true);
       }
-      setButtonState(reserveButton, false, '预约图书', true);
+      setButtonState(reserveButton, false, t('bookDetail.reserve'), true);
       return;
     }
 
-    setButtonState(cancelReservationButton, false, '取消预约', true);
+    setButtonState(cancelReservationButton, false, t('bookDetail.cancelReservation'), true);
 
     if (Number(book.availableCopies || 0) > 0) {
       if (Number(summary.activeReservationsCount || 0) > 0) {
-        setButtonState(borrowButton, true, '当前存在预约队列', true);
+        setButtonState(borrowButton, true, t('common.unavailable'), true);
       } else {
-        setButtonState(borrowButton, true, '借阅图书', false);
+        setButtonState(borrowButton, true, t('bookDetail.borrow'), false);
       }
-      setButtonState(reserveButton, false, '预约图书', true);
+      setButtonState(reserveButton, false, t('bookDetail.reserve'), true);
       return;
     }
 
-    setButtonState(borrowButton, true, '暂无可借库存', true);
-    setButtonState(reserveButton, true, '预约图书', false);
+    setButtonState(borrowButton, true, t('common.unavailable'), true);
+    setButtonState(reserveButton, true, t('bookDetail.reserve'), false);
   }
 
   async function loadDetailState(trackEntrySource = false) {
     const detailPath = trackEntrySource && source
       ? `/api/book/find-by-id/${id}?source=${encodeURIComponent(source)}&reason=${encodeURIComponent(reason)}`
       : `/api/book/find-by-id/${id}`;
+
     const [detailRes, activeLoanRes, summaryRes] = await Promise.all([
       BookApi.apiRequest(detailPath),
       BookApi.apiRequest('/api/loan/my-active'),
@@ -109,7 +112,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     ]);
 
     const book = detailRes?.body;
-    if (!book) throw new Error('接口未返回图书详情数据。');
+    if (!book) {
+        throw new Error(t('bookDetail.detailMissing'));
+    }
 
     const activeLoans = Array.isArray(activeLoanRes?.body) ? activeLoanRes.body : [];
     const activeLoan = activeLoans.find(loan => String(loan?.book?.id) === String(id)) || null;
@@ -122,12 +127,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       currentUserReservationId: null
     };
 
-    document.getElementById('detail-cover').innerHTML = window.BookUi.renderBookImage(book);
-    document.getElementById('detail-title').textContent = book.name || '未命名图书';
-    document.getElementById('detail-desc').textContent = book.description || '暂无简介。';
+    document.getElementById('detail-cover').innerHTML = BookUi.renderBookImage(book);
+    document.getElementById('detail-title').textContent = book.name || t('common.unknownBook');
+    document.getElementById('detail-desc').textContent = book.description || t('common.noDescription');
     renderMeta(book, summary);
     renderButtons(book, activeLoan, summary);
     document.getElementById('go-rate').href = `rate-book.html?bookId=${id}`;
+    BookUi.saveRecentView(book);
 
     return { book, summary };
   }
@@ -141,7 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           method: 'POST',
           body: { bookId: Number(id) }
         });
-        BookUi.showMessage('detail-message', 'success', '借阅成功。');
+        BookUi.showMessage('detail-message', 'success', t('bookDetail.borrowSuccess'));
         await loadDetailState();
       } catch (error) {
         BookUi.showMessage('detail-message', 'error', error.message);
@@ -154,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           method: 'POST',
           body: { bookId: Number(id) }
         });
-        BookUi.showMessage('detail-message', 'success', '预约成功。');
+        BookUi.showMessage('detail-message', 'success', t('bookDetail.reserveSuccess'));
         await loadDetailState();
       } catch (error) {
         BookUi.showMessage('detail-message', 'error', error.message);
@@ -166,12 +172,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         const summaryRes = await BookApi.apiRequest(`/api/reservation/book/${id}/summary`);
         const summary = summaryRes?.body;
         if (!summary?.currentUserReservationId) {
-          throw new Error('当前图书没有你的有效预约记录。');
+          throw new Error(t('bookDetail.noActiveReservation'));
         }
         await BookApi.apiRequest(`/api/reservation/${summary.currentUserReservationId}/cancel`, {
           method: 'POST'
         });
-        BookUi.showMessage('detail-message', 'success', '预约已取消。');
+        BookUi.showMessage('detail-message', 'success', t('bookDetail.reserveCancelled'));
         await loadDetailState();
       } catch (error) {
         BookUi.showMessage('detail-message', 'error', error.message);
@@ -180,23 +186,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const similarRes = await BookApi.apiRequest(`/api/book/recommendations/similar/${id}`);
     similarBooksWrap.innerHTML = BookUi.renderRecommendationShelves(similarRes?.body, {
-      emptyMessage: '当前图书暂无相关推荐。'
+      emptyMessage: t('bookDetail.similarEmpty')
     });
+    BookUi.refreshSaveButtons(similarBooksWrap);
 
     if (state.book.author?.id) {
       const authorRes = await BookApi.apiRequest(`/api/book/find-all-by-author-id/${state.book.author.id}`);
       const authorBooks = Array.isArray(authorRes?.body) ? authorRes.body : [];
       const relatedBooks = authorBooks.filter(item => String(item.id) !== String(id)).slice(0, 6);
-      document.getElementById('author-books').innerHTML = relatedBooks.length
+      authorBooksWrap.innerHTML = relatedBooks.length
         ? relatedBooks.map(item => BookUi.renderBookCard(item, {
           source: 'author-shelf',
-          sourceLabel: '同作者书架',
-          reason: `与当前图书同属作者 ${state.book.author?.name || '未知作者'} 的作品。`,
+          sourceLabel: t('bookDetail.authorShelfLabel'),
+          reason: t('bookDetail.authorShelfReason', { author: state.book.author?.name || t('common.unknownAuthor') }),
           actionType: 'BOOK_DETAIL_CLICK'
         })).join('')
-        : '<div class="card muted">该作者暂无更多可展示图书。</div>';
+        : `<div class="card muted">${escapeHtml(t('bookDetail.authorShelfEmpty'))}</div>`;
+      BookUi.refreshSaveButtons(authorBooksWrap);
     } else {
-      document.getElementById('author-books').innerHTML = '<div class="card muted">当前图书暂无作者书架数据。</div>';
+      authorBooksWrap.innerHTML = `<div class="card muted">${escapeHtml(t('bookDetail.noAuthorShelf'))}</div>`;
     }
   } catch (error) {
     BookUi.showMessage('detail-message', 'error', error.message);

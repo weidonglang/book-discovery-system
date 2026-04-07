@@ -1,3 +1,29 @@
 .recommendations-section {
   margin-top: 20px;
 }
+
+.recommendations-section .recommend-scroll-shell {
+  margin-top: 4px;
+}
+
+.recommendations-section .recommend-scroll-shell .book-list {
+  padding-right: 10px;
+}
+
+.recommendations-section .recommend-shelf:first-child .scroll-size-xl {
+  max-height: 780px;
+}
+
+.recommendations-section .recommend-shelf:not(:first-child) .scroll-size-lg {
+  max-height: 660px;
+}
+
+@media (max-width: 980px) {
+  .recommendations-section .recommend-shelf:first-child .scroll-size-xl {
+    max-height: 680px;
+  }
+
+  .recommendations-section .recommend-shelf:not(:first-child) .scroll-size-lg {
+    max-height: 560px;
+  }
+}

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Set;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+    List<Book> findByMarkedAsDeletedFalseOrderByCreatedDateDesc(Pageable pageable);
+
     List<Book> findAllByAuthorIdAndMarkedAsDeletedFalse(Long authorId);
 
     Boolean existsByAuthorIdAndMarkedAsDeletedFalse(Long authorId);
@@ -70,6 +72,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
                                                 @Param("toReadingDuration") Integer toReadingDuration,
                                                 @Param("deletedRecords") Boolean deletedRecords,
                                                 Pageable pageable);
+
+    @Query("SELECT b.id, COALESCE(b.usersRateCount, 0) FROM Book b WHERE b.markedAsDeleted = false ORDER BY COALESCE(b.usersRateCount, 0) DESC, COALESCE(b.rate, 0) DESC")
+    List<Object[]> aggregateRatedBooks(Pageable pageable);
 }
 /*
 weidonglang

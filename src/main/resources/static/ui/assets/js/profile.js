@@ -1,6 +1,25 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = window.BookI18n.t;
   BookUi.injectLayout();
   if (!BookUi.requireLogin()) return;
+
+  document.getElementById('gender').innerHTML = `
+    <option value="">${t('common.noneSelected')}</option>
+    <option value="MALE">${t('common.genderMale')}</option>
+    <option value="FEMALE">${t('common.genderFemale')}</option>
+    <option value="OTHERS">${t('common.genderOther')}</option>
+  `;
+  document.getElementById('maritalStatus').innerHTML = `
+    <option value="">${t('common.noneSelected')}</option>
+    <option value="SINGLE">${t('common.maritalSingle')}</option>
+    <option value="MARRIED">${t('common.maritalMarried')}</option>
+    <option value="IN_RELATIONSHIP">${t('common.maritalRelationship')}</option>
+  `;
+  document.getElementById('readingLevel').innerHTML = `
+    <option value="BEGINNER">${t('common.readLevelBeginner')}</option>
+    <option value="INTERMEDIATE">${t('common.readLevelIntermediate')}</option>
+    <option value="EXPERT">${t('common.readLevelExpert')}</option>
+  `;
 
   try {
     const [user, readingRes] = await Promise.all([
@@ -33,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     if (/anonymousUser|401|403|not exists/i.test(error.message)) {
       BookApi.clearSession();
-      BookUi.showMessage('profile-message', 'error', '登录状态已失效，请重新登录。');
+      BookUi.showMessage('profile-message', 'error', t('profile.sessionExpired'));
       setTimeout(() => BookUi.requireLogin(), 600);
     } else {
       BookUi.showMessage('profile-message', 'error', error.message);
@@ -60,11 +79,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       await BookApi.apiRequest('/api/user', { method: 'PUT', body: payload });
       await BookApi.fetchCurrentUser();
-      BookUi.showMessage('profile-message', 'success', '个人资料更新成功。');
+      BookUi.showMessage('profile-message', 'success', t('profile.profileSaved'));
     } catch (error) {
       if (/anonymousUser|401|403|not exists/i.test(error.message)) {
         BookApi.clearSession();
-        BookUi.showMessage('profile-message', 'error', '登录状态已失效，请重新登录。');
+        BookUi.showMessage('profile-message', 'error', t('profile.sessionExpired'));
         setTimeout(() => BookUi.requireLogin(), 600);
       } else {
         BookUi.showMessage('profile-message', 'error', error.message);
@@ -87,7 +106,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     try {
       await BookApi.apiRequest('/api/user/reading-info', { method: 'POST', body: payload });
-      BookUi.showMessage('reading-message', 'success', '阅读偏好保存成功。');
+      BookUi.showMessage('reading-message', 'success', t('profile.readingSaved'));
     } catch (error) {
       BookUi.showMessage('reading-message', 'error', error.message);
     }

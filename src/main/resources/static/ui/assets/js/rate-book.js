@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  const t = window.BookI18n.t;
   BookUi.injectLayout();
   if (!BookUi.requireLogin()) return;
 
   const params = new URLSearchParams(window.location.search);
   const bookId = params.get('bookId');
   if (!bookId) {
-    BookUi.showMessage('rate-message', 'error', '缺少 bookId 参数。');
+    BookUi.showMessage('rate-message', 'error', t('rateBook.missingId'));
     return;
   }
 
@@ -15,8 +16,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       BookApi.apiRequest(`/api/book/find-by-id/${bookId}`)
     ]);
     const book = bookRes?.body;
-    document.getElementById('rate-book-name').textContent = book?.name || `图书 #${bookId}`;
-    document.getElementById('rate-book-summary').textContent = `${book?.author?.name || '未知作者'} / ISBN ${book?.isbn || '-'} / 当前评分 ${book?.rate ?? '-'}`;
+    document.getElementById('rate-book-name').textContent = book?.name || t('rateBook.bookFallback', { id: bookId });
+    document.getElementById('rate-book-summary').textContent = t('rateBook.summary', {
+      author: book?.author?.name || t('common.unknownAuthor'),
+      isbn: book?.isbn || '-',
+      rate: book?.rate ?? '-'
+    });
 
     document.getElementById('rate-form').addEventListener('submit', async event => {
       event.preventDefault();
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           method: 'POST',
           body: payload
         });
-        BookUi.showMessage('rate-message', 'success', '评分提交成功。');
+        BookUi.showMessage('rate-message', 'success', t('rateBook.success'));
       } catch (error) {
         BookUi.showMessage('rate-message', 'error', error.message);
       }

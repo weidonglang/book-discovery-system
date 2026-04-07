@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const t = window.BookI18n.t;
   if (BookUi.redirectIfLoggedIn()) return;
   BookUi.injectLayout();
 
@@ -25,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const params = new URLSearchParams(window.location.search);
       const redirect = params.get('redirect') || 'index.html';
-      BookUi.showMessage('login-message', 'success', '登录成功，正在进入系统。');
+      BookUi.showMessage('login-message', 'success', t('login.success'));
       setTimeout(() => {
         window.location.href = redirect;
       }, 600);

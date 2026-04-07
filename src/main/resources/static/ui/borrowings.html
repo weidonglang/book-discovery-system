@@ -30,7 +30,9 @@
               <p class="muted">每条未归还借阅记录可续借一次。</p>
             </div>
           </div>
-          <div id="active-loans" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="active-loans" class="loan-list hover-scroll-window scroll-size-md"></div>
+          </div>
         </article>
 
         <article class="card">
@@ -40,7 +42,9 @@
               <p class="muted">已归还记录会保留，便于后续查看。</p>
             </div>
           </div>
-          <div id="loan-history" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="loan-history" class="loan-list hover-scroll-window scroll-size-lg"></div>
+          </div>
         </article>
       </section>
 
@@ -52,7 +56,9 @@
               <p class="muted">预约会保持生效，直到你取消预约或成功借到该书。</p>
             </div>
           </div>
-          <div id="active-reservations" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="active-reservations" class="loan-list hover-scroll-window scroll-size-md"></div>
+          </div>
         </article>
 
         <article class="card">
@@ -62,13 +68,16 @@
               <p class="muted">已完成和已取消的预约记录会展示在这里。</p>
             </div>
           </div>
-          <div id="reservation-history" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="reservation-history" class="loan-list hover-scroll-window scroll-size-lg"></div>
+          </div>
         </article>
       </section>
     </main>
   </div>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/ui.js"></script>
   <script src="assets/js/borrowings.js"></script>
 </body>

@@ -4,6 +4,7 @@ import com.weidonglang.NewBookRecommendationSystem.controller.base.BaseControlle
 import com.weidonglang.NewBookRecommendationSystem.dto.UserDto;
 import com.weidonglang.NewBookRecommendationSystem.dto.UserReadingInfoDto;
 import com.weidonglang.NewBookRecommendationSystem.dto.base.response.ApiResponse;
+import com.weidonglang.NewBookRecommendationSystem.service.HomeDashboardService;
 import com.weidonglang.NewBookRecommendationSystem.service.UserReadingInfoService;
 import com.weidonglang.NewBookRecommendationSystem.service.UserService;
 import lombok.AllArgsConstructor;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 public class UserController implements BaseController<UserService> {
     private final UserService userService;
     private final UserReadingInfoService userReadingInfoService;
+    private final HomeDashboardService homeDashboardService;
 
     @Override
     public UserService getService() {
@@ -48,6 +50,14 @@ public class UserController implements BaseController<UserService> {
         log.info("UserController: createUserReadingInfo() called");
         return new ApiResponse(true, LocalDateTime.now().toString(),
                 "User reading info fetched successfully.", userReadingInfoService.findUserReadingInfo());
+    }
+
+    @GetMapping("/home-dashboard")
+    @PreAuthorize("isAuthenticated()")
+    public ApiResponse findCurrentUserHomeDashboard() {
+        log.info("UserController: findCurrentUserHomeDashboard() called");
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Current user home dashboard fetched successfully.", homeDashboardService.buildCurrentUserDashboard());
     }
 
     @GetMapping("/find-is-email-exists/{email}")

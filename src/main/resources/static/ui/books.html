@@ -61,7 +61,8 @@
           </div>
         </div>
 
-        <form id="filter-form" class="form-grid books-filter-form">
+        <div class="hover-scroll-shell books-filter-scroll">
+        <form id="filter-form" class="form-grid books-filter-form hover-scroll-window scroll-size-xl">
           <div class="field full books-keyword-field">
             <label class="label" for="keyword">关键词</label>
             <input id="keyword" placeholder="按书名、ISBN、作者、分类、出版社或标签搜索" />
@@ -150,6 +151,8 @@
             </div>
           </div>
         </form>
+        </div>
+        <div class="scroll-hint">鼠标放在高级筛选区域后，可继续向下滚动查看更多筛选项</div>
       </section>
 
       <section class="card books-results-shell">
@@ -177,6 +180,7 @@
   </div>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/ui.js"></script>
   <script src="assets/js/books.js"></script>
 </body>

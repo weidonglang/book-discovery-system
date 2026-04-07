@@ -144,7 +144,8 @@
     if (!value) return '-';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return String(value);
-    return date.toLocaleDateString('zh-CN');
+    const locale = window.BookI18n?.getLocale ? window.BookI18n.getLocale() : 'zh-CN';
+    return date.toLocaleDateString(locale);
   }
 
   function safeText(value, fallback = '-') {

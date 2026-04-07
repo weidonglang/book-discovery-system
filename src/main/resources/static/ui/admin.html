@@ -18,8 +18,8 @@
         </div>
       </section>
 
-      <section class="admin-grid">
-        <article class="card admin-analytics-card">
+      <section class="admin-grid admin-grid-full">
+        <article class="card admin-card admin-analytics-card">
           <div class="section-head">
             <div>
               <h2>Behavior Analytics</h2>
@@ -46,46 +46,64 @@
             </section>
             <section>
               <h3>Top Keywords</h3>
-              <div id="admin-top-keywords" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-keywords" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Categories</h3>
-              <div id="admin-top-categories" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-categories" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Authors</h3>
-              <div id="admin-top-authors" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-authors" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Tags</h3>
-              <div id="admin-top-tags" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-tags" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Publishers</h3>
-              <div id="admin-top-publishers" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-publishers" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Clicked Books</h3>
-              <div id="admin-top-clicked-books" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-clicked-books" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Top Borrowed Books</h3>
-              <div id="admin-top-borrowed-books" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-top-borrowed-books" class="admin-list compact-list hover-scroll-window scroll-size-sm"></div>
+              </div>
             </section>
             <section>
               <h3>Recent Searches</h3>
-              <div id="admin-recent-searches" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-recent-searches" class="admin-list compact-list hover-scroll-window scroll-size-md"></div>
+              </div>
             </section>
             <section class="full-span">
               <h3>Recent Behavior</h3>
-              <div id="admin-recent-behavior" class="admin-list compact-list"></div>
+              <div class="hover-scroll-shell">
+                <div id="admin-recent-behavior" class="admin-list compact-list hover-scroll-window scroll-size-lg"></div>
+              </div>
             </section>
           </div>
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-editor">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>图书编辑</h2>
@@ -93,7 +111,8 @@
             </div>
             <button id="reset-book-form" type="button">新增图书</button>
           </div>
-          <form id="book-form" class="form-grid">
+          <div class="hover-scroll-shell">
+          <form id="book-form" class="form-grid hover-scroll-window scroll-size-xl">
             <input id="book-id" type="hidden" />
             <div class="field">
               <label class="label" for="book-name">书名</label>
@@ -181,9 +200,10 @@
               <button class="primary" type="submit">保存图书</button>
             </div>
           </form>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>作者编辑</h2>
@@ -191,7 +211,8 @@
             </div>
             <button id="reset-author-form" type="button">新增作者</button>
           </div>
-          <form id="author-form" class="form-grid">
+          <div class="hover-scroll-shell">
+          <form id="author-form" class="form-grid hover-scroll-window scroll-size-lg">
             <input id="author-id" type="hidden" />
             <div class="field">
               <label class="label" for="author-name">姓名</label>
@@ -233,11 +254,12 @@
               <button class="primary" type="submit">保存作者</button>
             </div>
           </form>
+          </div>
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-triple">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>分类编辑</h2>
@@ -261,7 +283,7 @@
           </form>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>出版社编辑</h2>
@@ -293,7 +315,7 @@
           </form>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>标签编辑</h2>
@@ -318,8 +340,8 @@
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-lists">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>图书列表</h2>
@@ -331,10 +353,12 @@
             <label class="label" for="book-list-search">查找要编辑的图书</label>
             <input id="book-list-search" type="search" placeholder="按书名、作者或分类搜索" />
           </div>
-          <div id="book-admin-list" class="admin-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="book-admin-list" class="admin-list hover-scroll-window scroll-size-xl"></div>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>作者列表</h2>
@@ -346,12 +370,14 @@
             <label class="label" for="author-list-search">查找要编辑的作者</label>
             <input id="author-list-search" type="search" placeholder="按作者姓名或国家搜索" />
           </div>
-          <div id="author-admin-list" class="admin-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="author-admin-list" class="admin-list hover-scroll-window scroll-size-lg"></div>
+          </div>
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-triple">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>分类列表</h2>
@@ -363,10 +389,12 @@
             <label class="label" for="category-list-search">查找要编辑的分类</label>
             <input id="category-list-search" type="search" placeholder="按分类名称或说明搜索" />
           </div>
-          <div id="category-admin-list" class="admin-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="category-admin-list" class="admin-list hover-scroll-window scroll-size-md"></div>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>出版社列表</h2>
@@ -378,10 +406,12 @@
             <label class="label" for="publisher-list-search">查找要编辑的出版社</label>
             <input id="publisher-list-search" type="search" placeholder="按出版社名称或国家搜索" />
           </div>
-          <div id="publisher-admin-list" class="admin-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="publisher-admin-list" class="admin-list hover-scroll-window scroll-size-md"></div>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>标签列表</h2>
@@ -393,12 +423,14 @@
             <label class="label" for="tag-list-search">查找要编辑的标签</label>
             <input id="tag-list-search" type="search" placeholder="按标签名称或说明搜索" />
           </div>
-          <div id="tag-admin-list" class="admin-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="tag-admin-list" class="admin-list hover-scroll-window scroll-size-md"></div>
+          </div>
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-circulation">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>当前借阅</h2>
@@ -406,45 +438,54 @@
             </div>
             <button id="reload-circulation" type="button">刷新流通数据</button>
           </div>
-          <div id="admin-active-loans" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="admin-active-loans" class="loan-list hover-scroll-window scroll-size-lg"></div>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>借阅历史</h2>
               <p class="muted">展示所有用户的已归还记录。</p>
             </div>
           </div>
-          <div id="admin-loan-history" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="admin-loan-history" class="loan-list hover-scroll-window scroll-size-xl"></div>
+          </div>
         </article>
       </section>
 
-      <section class="admin-grid">
-        <article class="card">
+      <section class="admin-grid admin-grid-circulation">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>当前预约</h2>
               <p class="muted">展示所有生效中的预约请求，按排队时间排序。</p>
             </div>
           </div>
-          <div id="admin-active-reservations" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="admin-active-reservations" class="loan-list hover-scroll-window scroll-size-lg"></div>
+          </div>
         </article>
 
-        <article class="card">
+        <article class="card admin-card">
           <div class="section-head">
             <div>
               <h2>预约历史</h2>
               <p class="muted">展示所有用户已完成和已取消的预约记录。</p>
             </div>
           </div>
-          <div id="admin-reservation-history" class="loan-list"></div>
+          <div class="hover-scroll-shell">
+            <div id="admin-reservation-history" class="loan-list hover-scroll-window scroll-size-xl"></div>
+          </div>
         </article>
       </section>
     </main>
   </div>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/api.js"></script>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/ui.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>

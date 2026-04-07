@@ -7,6 +7,10 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
+function t(key, variables = {}) {
+  return window.BookI18n.t(key, variables);
+}
+
 let allAuthors = [];
 let allCategories = [];
 let allPublishers = [];
@@ -89,12 +93,12 @@ function renderAuthorPicker() {
         <input type="checkbox" name="author" value="${author.id}" ${selectedIds.has(String(author.id)) ? 'checked' : ''}>
         <span>${escapeHtml(author.name)}</span>
       </label>`).join('')
-    : '<div class="muted">当前搜索条件下没有匹配的作者。</div>';
+    : `<div class="muted">${escapeHtml(t('books.noAuthors'))}</div>`;
 
   const selectedAuthors = allAuthors.filter(author => selectedIds.has(String(author.id)));
   summary.innerHTML = selectedAuthors.length
     ? selectedAuthors.map(author => `<span class="tag">${escapeHtml(author.name)}</span>`).join('')
-    : '<span class="muted">暂未选择作者。</span>';
+    : `<span class="muted">${escapeHtml(t('books.noAuthorSelected'))}</span>`;
 }
 
 function setAuthorSelection(authorIds) {
@@ -126,7 +130,7 @@ function applyQueryDefaults(authors, categories) {
     const availableIds = new Set(authors.map(author => String(author.id)));
     if (availableIds.has(String(authorId))) {
       setAuthorSelection([authorId]);
-      BookUi.showMessage('books-message', 'info', '已根据来源页面自动选中对应作者。');
+      BookUi.showMessage('books-message', 'info', t('books.autoAuthor'));
     }
   }
 
@@ -135,7 +139,7 @@ function applyQueryDefaults(authors, categories) {
     if (categoryMap.has(String(categoryId))) {
       setCheckboxSelection('category', [categoryId]);
       const category = categoryMap.get(String(categoryId));
-      BookUi.showMessage('books-message', 'info', `已为你自动选中分类：${BookUi.localizeCategoryName(category.name)}`);
+      BookUi.showMessage('books-message', 'info', t('books.autoCategory', { category: BookUi.localizeCategoryName(category.name) }));
     }
   }
 }
@@ -151,28 +155,28 @@ function buildSearchHitReason(book, payload) {
 
   if (keyword) {
     if (includesIgnoreCase(book.name, keyword)) {
-      reasons.push(`书名命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonName', { keyword }));
     } else if (includesIgnoreCase(book.isbn, keyword)) {
-      reasons.push(`ISBN 命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonIsbn', { keyword }));
     } else if (includesIgnoreCase(book.author?.name, keyword)) {
-      reasons.push(`作者命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonAuthor', { keyword }));
     } else if (includesIgnoreCase(book.category?.name, keyword)) {
-      reasons.push(`分类命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonCategory', { keyword }));
     } else if (includesIgnoreCase(book.publisher?.name, keyword)) {
-      reasons.push(`出版社命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonPublisher', { keyword }));
     } else if ((book.tags || []).some(tag => includesIgnoreCase(tag?.name, keyword))) {
-      reasons.push(`标签命中关键词“${keyword}”`);
+      reasons.push(t('books.reasonTag', { keyword }));
     }
   }
 
   if (criteria.categories && book.category?.id && criteria.categories.includes(book.category.id)) {
-    reasons.push(`符合分类筛选：${BookUi.localizeCategoryName(book.category.name) || book.category.id}`);
+    reasons.push(t('books.reasonCategoryFilter', { value: BookUi.localizeCategoryName(book.category.name) || book.category.id }));
   }
   if (criteria.authors && book.author?.id && criteria.authors.includes(book.author.id)) {
-    reasons.push(`符合作者筛选：${book.author.name || book.author.id}`);
+    reasons.push(t('books.reasonAuthorFilter', { value: book.author.name || book.author.id }));
   }
   if (criteria.publishers && book.publisher?.id && criteria.publishers.includes(book.publisher.id)) {
-    reasons.push(`符合出版社筛选：${book.publisher.name || book.publisher.id}`);
+    reasons.push(t('books.reasonPublisherFilter', { value: book.publisher.name || book.publisher.id }));
   }
   if (criteria.tags && Array.isArray(book.tags)) {
     const matchedTagNames = book.tags
@@ -180,25 +184,25 @@ function buildSearchHitReason(book, payload) {
       .map(tag => tag.name)
       .filter(Boolean);
     if (matchedTagNames.length) {
-      reasons.push(`符合标签筛选：${matchedTagNames.join(', ')}`);
+      reasons.push(t('books.reasonTagFilter', { value: matchedTagNames.join(', ') }));
     }
   }
 
   const sortField = payload.sortingByList?.[0]?.fieldName || 'id';
   if (sortField === 'usersRateCount') {
-    reasons.push(`当前按热度排序，评分人数 ${book.usersRateCount ?? 0}`);
+    reasons.push(t('books.reasonSortPopularity', { value: book.usersRateCount ?? 0 }));
   } else if (sortField === 'publishDate') {
-    reasons.push(`当前按出版时间排序，出版日期 ${BookApi.toDisplayDate(book.publishDate)}`);
+    reasons.push(t('books.reasonSortPublishDate', { value: BookApi.toDisplayDate(book.publishDate) }));
   } else if (sortField === 'rate') {
-    reasons.push(`当前按评分排序，平均分 ${book.rate ?? '-'}`);
+    reasons.push(t('books.reasonSortRate', { value: book.rate ?? '-' }));
   }
 
-  return reasons.length ? reasons.join('；') : '来自基础检索结果，可继续查看图书详情。';
+  return reasons.length ? reasons.join(window.BookI18n.isChinese() ? '；' : '; ') : t('books.reasonFallback');
 }
 
 async function loadBooks(pageNumber = 1) {
   const target = document.getElementById('book-results');
-  target.innerHTML = '<div class="card muted">正在加载图书...</div>';
+  target.innerHTML = `<div class="card muted">${escapeHtml(t('books.loading'))}</div>`;
   const payload = buildBookFilterPayload(pageNumber);
 
   try {
@@ -213,18 +217,23 @@ async function loadBooks(pageNumber = 1) {
     target.innerHTML = pagination.list.length
       ? pagination.list.map(book => BookUi.renderBookCard(book, {
         source: 'search:books-page',
-        sourceLabel: '图书检索',
+        sourceLabel: t('books.sourceLabel'),
         reason: buildSearchHitReason(book, payload),
         actionType: 'BOOK_DETAIL_CLICK',
         searchKeyword
       })).join('')
-      : '<div class="card muted">当前筛选条件下没有匹配图书。</div>';
+      : `<div class="card muted">${escapeHtml(t('books.emptyResults'))}</div>`;
+    BookUi.refreshSaveButtons(target);
 
     document.getElementById('page-summary').textContent =
-      `第 ${currentPage} / ${pagination.totalNumberOfPages || 1} 页，共 ${pagination.totalNumberOfElements} 本图书`;
+      t('books.pageSummary', {
+        page: currentPage,
+        totalPages: pagination.totalNumberOfPages || 1,
+        totalElements: pagination.totalNumberOfElements
+      });
     document.getElementById('currentPage').value = String(currentPage);
   } catch (error) {
-    target.innerHTML = `<div class="card">图书加载失败：${escapeHtml(error.message)}</div>`;
+    target.innerHTML = `<div class="card">${escapeHtml(t('books.loadFailed', { message: error.message }))}</div>`;
   }
 }
 
@@ -248,6 +257,21 @@ function resetSearchForm() {
 document.addEventListener('DOMContentLoaded', async () => {
   if (!BookUi.requireLogin()) return;
   BookUi.injectLayout();
+  document.getElementById('sortField').innerHTML = `
+    <option value="id">${t('books.optionId')}</option>
+    <option value="name">${t('books.optionName')}</option>
+    <option value="price">${t('books.optionPrice')}</option>
+    <option value="pagesNumber">${t('books.optionPages')}</option>
+    <option value="readingDuration">${t('books.optionDuration')}</option>
+    <option value="rate">${t('books.optionRate')}</option>
+    <option value="usersRateCount">${t('books.optionPopularity')}</option>
+    <option value="publishDate">${t('books.optionPublishDate')}</option>
+    <option value="availableCopies">${t('books.optionCopies')}</option>
+  `;
+  document.getElementById('sortDirection').innerHTML = `
+    <option value="ASC">${t('books.sortAsc')}</option>
+    <option value="DESC">${t('books.sortDesc')}</option>
+  `;
 
   try {
     const [categoryRes, tagRes, publisherRes, authorRes] = await Promise.all([
@@ -273,9 +297,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderCheckboxList('category-filters', 'category', allCategories);
     renderCheckboxList('tag-filters', 'tag', allTags);
-    renderSelectOptions('publisher-filter', allPublishers, '暂无可选出版社');
+    renderSelectOptions('publisher-filter', allPublishers, t('common.noData'));
     renderAuthorPicker();
     applyQueryDefaults(allAuthors, allCategories);
+    BookUi.refreshScrollShells(document);
   } catch (error) {
     BookUi.showMessage('books-message', 'warning', `筛选条件加载失败：${error.message}`);
   }

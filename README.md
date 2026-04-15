@@ -493,5 +493,3 @@ This project is released under the open-source license declared in the current r
 
 本项目采用仓库当前声明的开源许可证，详情见 `LICENSE` 文件。
 
-```
-

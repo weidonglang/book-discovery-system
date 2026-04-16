@@ -1,8 +1,16 @@
+<<<<<<< Updated upstream
 # Book Discovery and Recommendation System  
 # 图书发现与推荐系统
 
 Java-based book discovery, recommendation, and circulation project for graduation design, coursework, and local demo use.  
 一个基于 Java 的图书发现、推荐与借阅流通系统项目，适用于毕业设计、课程设计与本地演示场景。
+=======
+# ReadSeek: Reading Resource Discovery System
+
+面向阅读资源发现的自然语言混合检索、证据驱动问答与可解释推荐关键技术研究与系统实现。
+
+ReadSeek is a Java-based reading-resource discovery system. It uses books as the current demonstration and experimental resource type, while the system positioning is broader than a traditional library or book management system.
+>>>>>>> Stashed changes
 
 ## Current Status / 当前状态
 
@@ -31,12 +39,36 @@ This repository is suitable for:
 - A base system for further work on hybrid retrieval, RAG, and explainable recommendation  
   作为后续继续扩展混合检索、RAG 和可解释推荐的基础系统
 
+<<<<<<< Updated upstream
 This is a local-development and demo-oriented version, not a production-hardened release.  
 当前版本主要面向本地开发与演示，并不是经过生产环境强化的正式发布版本。
 
 ---
 
 ## Features / 功能概览
+=======
+### Core business
+- User registration, login, refresh token flow, and role-based access control
+- Reading-resource listing, detail, rating, borrowing, return, renewal, and reservation
+- Recommendation overview, popular resources, preference-based recommendation, and collaborative filtering
+- Behavior logging for search, detail click, and recommendation click
+
+### Search
+- PostgreSQL exact matching
+- Elasticsearch BM25 full-text retrieval
+- Hybrid search API for keyword and natural-language queries
+- Chinese query expansion rules for common categories and author aliases
+- Automatic resource search index sync on create, update, and logical delete
+
+### Frontend
+- Home dashboard
+- Search workspace
+- Resource detail page
+- Recommendation page
+- Borrowing page
+- Profile page
+- Admin page
+>>>>>>> Stashed changes
 
 ### Core Business / 核心业务
 - User registration, login, refresh token flow, and role-based access control  
@@ -378,6 +410,7 @@ new-book-recommendation-system/
 > If your repository name has not been changed yet, replace `new-book-recommendation-system/` with your current folder name.
 > 如果你的仓库名还没改，可以把这里替换成当前实际目录名。
 
+<<<<<<< Updated upstream
 ---
 
 ## 6. Requirements / 运行环境要求
@@ -412,6 +445,48 @@ If Elasticsearch is enabled in your local environment, also update the related s
 
 > Do not commit real credentials or private connection information to a public repository.
 > 不要将真实账号密码或私有连接信息提交到公开仓库。
+=======
+### Option A: One-click local startup
+
+On Windows, double-click:
+
+```text
+start-readseek.bat
+```
+
+Or run it from PowerShell:
+
+```powershell
+.\start-readseek.bat
+```
+
+This starts:
+- PostgreSQL on `localhost:5043`
+- Elasticsearch on `localhost:9200`
+- Spring Boot on `http://localhost:8010/book-service`
+- Local AI service on `http://127.0.0.1:8001`
+- Browser page `http://localhost:8010/book-service/ui/login.html`
+
+Useful switches:
+
+```powershell
+.\start-readseek.bat -NoAi
+.\start-readseek.bat -NoBrowser
+.\start-readseek.bat -StartPage home
+.\start-readseek.bat -StartPage search
+.\start-readseek.bat -StartPage swagger
+.\start-readseek.bat -DbPassword 20041117
+.\start-readseek.bat -JavaHome "C:\Users\WDL\.jdks\ms-17.0.18"
+```
+
+If startup or login looks abnormal, run:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\diagnose-readseek.ps1
+```
+
+### Option B: Manual local development flow
+>>>>>>> Stashed changes
 
 Open two terminals in the project root.
 在项目根目录打开两个终端。
@@ -521,7 +596,11 @@ Frontend search page / 前端搜索页面：
 http://localhost:8010/book-service/ui/books.html
 ```
 
+<<<<<<< Updated upstream
 ---
+=======
+### Option C: Docker app container
+>>>>>>> Stashed changes
 
 ## 9. Search and Vector Testing / 搜索与向量测试
 
@@ -562,6 +641,23 @@ When AI mode is enabled and the index has been rebuilt, the strategy should show
 hybrid-v2(exact-db+bm25+vector)
 ```
 
+Resource-oriented API aliases:
+
+```text
+GET  /api/resources/{resourceId}
+POST /api/resources/search
+GET  /api/resources/recommended
+GET  /api/resources/recommendations/popular
+GET  /api/resources/recommendations/overview
+GET  /api/resources/recommendations/similar/{resourceId}
+GET  /api/resources/categories
+GET  /api/search/resources?q=...&limit=...
+GET  /api/search/resources/bm25?q=...&limit=...
+POST /api/search/index/resources/rebuild
+```
+
+The older `/api/book/...` and `/api/search/books...` endpoints are still kept for compatibility.
+
 More detailed local testing steps are in:
 更详细的本地测试步骤见：
 
@@ -589,14 +685,28 @@ Current embedding backend:
 * not a final semantic model
   不是最终语义模型
 
+<<<<<<< Updated upstream
 Details / 详细说明：
+=======
+## Current Research-Oriented Status
+>>>>>>> Stashed changes
 
 * [ai-service/README.md](ai-service/README.md)
 * [docs/vector-retrieval-ai-service-plan.md](docs/vector-retrieval-ai-service-plan.md)
 
 ---
 
+<<<<<<< Updated upstream
 ## 11. Current Search Status / 当前搜索状态
+=======
+Terminology note:
+- Public-facing product terminology uses "reading resource" and "resource discovery"
+- Current sample data and some internal class names still use "book" for compatibility with the existing database and implemented business flow
+- Resource-oriented API aliases and search DTO aliases have been added
+- Full database and Liquibase renaming is intentionally deferred
+
+## Known Limitations
+>>>>>>> Stashed changes
 
 Implemented now / 当前已实现：
 
@@ -880,7 +990,7 @@ Near-term priorities / 近期重点：
 ### 14.3 Useful Commands / 常用命令
 
 ```powershell
-.\start-ai-service.bat
+.\start-readseek.bat
 ```
 
 ```powershell

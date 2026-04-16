@@ -1195,8 +1195,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     homeState.user = await BookApi.fetchCurrentUser();
 
     const [categoryResult, recommendResult, dashboardResult] = await Promise.allSettled([
-      BookApi.apiRequest('/api/book/find-all-categories'),
-      BookApi.apiRequest('/api/book/recommendations/overview'),
+      BookApi.apiRequest('/api/resources/categories'),
+      BookApi.apiRequest('/api/resources/recommendations/overview'),
       BookApi.apiRequest('/api/user/home-dashboard')
     ]);
 

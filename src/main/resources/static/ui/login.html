@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>登录 - 图书推荐系统</title>
+  <title>登录 - ReadSeek 阅读资源智能发现系统</title>
   <link rel="stylesheet" href="assets/css/common.css" />
   <link rel="stylesheet" href="assets/css/login.css" />
 </head>
@@ -12,8 +12,8 @@
     <main class="page">
       <div class="page-header">
         <div>
-          <h1 class="page-title">登录后继续你的阅读</h1>
-          <p class="page-subtitle">登录后即可进入首页推荐、借阅提醒、收藏书单和个人阅读空间。</p>
+          <h1 class="page-title">登录后继续你的阅读资源发现</h1>
+          <p class="page-subtitle">登录后即可进入首页、智能检索、可解释推荐、借阅提醒和个人阅读空间。</p>
         </div>
       </div>
       <div class="grid two login-layout">
@@ -22,11 +22,11 @@
           <form id="login-form">
             <div class="field">
               <label class="label" for="email">邮箱</label>
-              <input id="email" type="email" required placeholder="请输入邮箱" />
+              <input id="email" type="email" required placeholder="请输入邮箱" autocomplete="email" />
             </div>
             <div class="field">
               <label class="label" for="password">密码</label>
-              <input id="password" type="password" required placeholder="请输入密码" />
+              <input id="password" type="password" required placeholder="请输入密码" autocomplete="current-password" />
             </div>
             <details class="login-advanced-settings">
               <summary class="login-advanced-summary">连接设置（一般无需修改）</summary>
@@ -44,11 +44,12 @@
         </section>
         <section class="card">
           <h2>登录说明</h2>
-          <div class="muted">使用已注册账号登录后，系统会自动保存登录状态，并同步当前用户信息。大多数情况下，你只需要输入邮箱和密码即可。</div>
+          <div class="muted">使用已注册账号登录后，系统会自动保存登录状态，并同步当前用户信息。大多数情况下，只需要输入邮箱和密码。</div>
           <ul>
+            <li>默认管理员邮箱：<code>admin@booknook.local</code></li>
+            <li>默认管理员密码：<code>Admin123!</code></li>
             <li>默认服务地址：<code>http://localhost:8010/book-service</code></li>
-            <li>登录成功后会优先返回你刚才准备访问的页面</li>
-            <li>登录后顶部导航会显示当前账号，并开放推荐、借阅与个人中心入口</li>
+            <li>登录成功后会优先返回你刚才准备访问的页面。</li>
           </ul>
         </section>
       </div>

@@ -126,8 +126,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function loadDetailState(trackEntrySource = false) {
     const detailPath = trackEntrySource && source
-      ? `/api/book/find-by-id/${id}?source=${encodeURIComponent(source)}&reason=${encodeURIComponent(reason)}`
-      : `/api/book/find-by-id/${id}`;
+      ? `/api/resources/${id}?source=${encodeURIComponent(source)}&reason=${encodeURIComponent(reason)}`
+      : `/api/resources/${id}`;
 
     const [detailRes, activeLoanRes, summaryRes] = await Promise.all([
       BookApi.apiRequest(detailPath),
@@ -208,14 +208,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    const similarRes = await BookApi.apiRequest(`/api/book/recommendations/similar/${id}`);
+    const similarRes = await BookApi.apiRequest(`/api/resources/recommendations/similar/${id}`);
     similarBooksWrap.innerHTML = BookUi.renderRecommendationShelves(similarRes?.body, {
       emptyMessage: t('bookDetail.similarEmpty')
     });
     BookUi.refreshSaveButtons(similarBooksWrap);
 
     if (state.book.author?.id) {
-      const authorRes = await BookApi.apiRequest(`/api/book/find-all-by-author-id/${state.book.author.id}`);
+      const authorRes = await BookApi.apiRequest(`/api/resources/authors/${state.book.author.id}`);
       const authorBooks = Array.isArray(authorRes?.body) ? authorRes.body : [];
       const relatedBooks = authorBooks.filter(item => String(item.id) !== String(id)).slice(0, 6);
       authorBooksWrap.innerHTML = relatedBooks.length

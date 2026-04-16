@@ -51,6 +51,16 @@ public class SearchController {
                 "BM25 book search completed successfully.", response);
     }
 
+    @GetMapping("/resources/bm25")
+    public ApiResponse searchResourcesByBm25(@RequestParam("q") String query,
+                                             @RequestParam(defaultValue = "10") Integer limit) {
+        log.info("SearchController: searchResourcesByBm25() called, q='{}', limit={}", query, limit);
+        BookSearchResponseDto response = bookSearchService.searchByBm25(query, limit);
+        recordSearch(query, limit, response, "resource-search-api-bm25");
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "BM25 reading-resource search completed successfully.", response);
+    }
+
     @GetMapping("/books")
     public ApiResponse searchBooks(@RequestParam("q") String query,
                                    @RequestParam(defaultValue = "10") Integer limit) {
@@ -61,6 +71,16 @@ public class SearchController {
                 "Hybrid book search completed successfully.", response);
     }
 
+    @GetMapping("/resources")
+    public ApiResponse searchResources(@RequestParam("q") String query,
+                                       @RequestParam(defaultValue = "10") Integer limit) {
+        log.info("SearchController: searchResources() called, q='{}', limit={}", query, limit);
+        BookSearchResponseDto response = bookSearchService.searchBooks(query, limit);
+        recordSearch(query, limit, response, "resource-search-api-hybrid");
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Hybrid reading-resource search completed successfully.", response);
+    }
+
     @PostMapping("/index/books/rebuild")
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse rebuildBookIndex() {
@@ -69,12 +89,28 @@ public class SearchController {
                 "Book search index rebuilt successfully.", Map.of("indexedCount", indexedCount));
     }
 
+    @PostMapping("/index/resources/rebuild")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse rebuildResourceIndex() {
+        long indexedCount = bookSearchIndexService.rebuildBookIndex();
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Reading-resource search index rebuilt successfully.", Map.of("indexedCount", indexedCount));
+    }
+
     @PostMapping("/index/books/{bookId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse indexBook(@PathVariable Long bookId) {
         bookSearchIndexService.indexBook(bookId);
         return new ApiResponse(true, LocalDateTime.now().toString(),
                 "Book indexed successfully.", Map.of("bookId", bookId));
+    }
+
+    @PostMapping("/index/resources/{resourceId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ApiResponse indexResource(@PathVariable Long resourceId) {
+        bookSearchIndexService.indexBook(resourceId);
+        return new ApiResponse(true, LocalDateTime.now().toString(),
+                "Reading resource indexed successfully.", Map.of("resourceId", resourceId));
     }
 
     private void recordSearch(String query,

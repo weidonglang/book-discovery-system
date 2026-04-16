@@ -9,9 +9,9 @@ function escapeHtml(value) {
 
 function buildOverviewQuery(recentDays) {
   if (!recentDays) {
-    return '/api/book/recommendations/overview';
+    return '/api/resources/recommendations/overview';
   }
-  return `/api/book/recommendations/overview?recentDays=${encodeURIComponent(recentDays)}`;
+  return `/api/resources/recommendations/overview?recentDays=${encodeURIComponent(recentDays)}`;
 }
 
 function updateWindowCopy(recentDays) {

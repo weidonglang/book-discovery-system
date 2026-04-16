@@ -504,7 +504,7 @@ async function loadBooks(pageNumber = 1) {
     if (shouldUseSearchApi(payload)) {
       const limit = payload.pageSize;
       const encodedQuery = encodeURIComponent(keyword.trim());
-      const response = await BookApi.apiRequest(`/api/search/books?q=${encodedQuery}&limit=${limit}`);
+      const response = await BookApi.apiRequest(`/api/search/resources?q=${encodedQuery}&limit=${limit}`);
       const body = response?.body || {};
       const hits = Array.isArray(body.hits) ? body.hits : [];
 
@@ -531,7 +531,7 @@ async function loadBooks(pageNumber = 1) {
       return;
     }
 
-    const response = await BookApi.apiRequest('/api/book/find-all-paginated-filtered', {
+    const response = await BookApi.apiRequest('/api/resources/search', {
       method: 'POST',
       body: payload
     });
@@ -540,7 +540,7 @@ async function loadBooks(pageNumber = 1) {
 
     target.innerHTML = pagination.list.length
       ? pagination.list.map(book => BookUi.renderBookCard(book, {
-        source: 'search:books-page',
+        source: 'search:resources-page',
         sourceLabel: labels.filterSourceLabel,
         reason: buildFilterHitReason(book, payload),
         actionType: 'BOOK_DETAIL_CLICK',
@@ -607,7 +607,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const [categoryRes, tagRes, publisherRes, authorRes] = await Promise.all([
-      BookApi.apiRequest('/api/book/find-all-categories'),
+      BookApi.apiRequest('/api/resources/categories'),
       BookApi.apiRequest('/api/tag'),
       BookApi.apiRequest('/api/publisher'),
       BookApi.apiRequest('/api/author/find-all-paginated-filtered', {

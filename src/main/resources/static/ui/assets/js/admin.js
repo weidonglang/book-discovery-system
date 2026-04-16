@@ -531,7 +531,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function removeBook(id) {
     if (!window.confirm(adminText(`确认软删除图书 #${id} 吗？`, `Soft-delete book #${id}?`))) return;
-    await BookApi.apiRequest(`/api/book/${id}`, { method: 'DELETE' });
+    await BookApi.apiRequest(`/api/resources/${id}`, { method: 'DELETE' });
     await loadBooks();
   }
 
@@ -823,7 +823,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   async function loadBooks() {
-    const response = await BookApi.apiRequest('/api/book/find-all-paginated-filtered', {
+    const response = await BookApi.apiRequest('/api/resources/search', {
       method: 'POST',
       body: buildBookAdminPayload()
     });
@@ -999,7 +999,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     try {
-      await BookApi.apiRequest('/api/book', {
+      await BookApi.apiRequest('/api/resources', {
         method: bookId ? 'PUT' : 'POST',
         body: payload
       });

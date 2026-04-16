@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const [user, bookRes] = await Promise.all([
       BookApi.fetchCurrentUser(),
-      BookApi.apiRequest(`/api/book/find-by-id/${bookId}`)
+      BookApi.apiRequest(`/api/resources/${bookId}`)
     ]);
     const book = bookRes?.body;
     document.getElementById('rate-book-name').textContent = book?.name || t('rateBook.bookFallback', { id: bookId });
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       };
 
       try {
-        await BookApi.apiRequest('/api/book/rate', {
+        await BookApi.apiRequest('/api/resources/rate', {
           method: 'POST',
           body: payload
         });

@@ -1427,6 +1427,227 @@
     { selector: 'article:has(#admin-reservation-history) .section-head .muted', key: 'admin.reservationHistoryCopy' }
   ];
 
+  function ensureDictionaryGroups(language, groups) {
+    groups.forEach(group => {
+      dictionaries[language][group] = dictionaries[language][group] || {};
+    });
+  }
+
+  ensureDictionaryGroups('zh-CN', ['common', 'books', 'bookDetail', 'rateBook', 'recommendations', 'home', 'borrowings', 'admin']);
+  ensureDictionaryGroups('en-US', ['common', 'books', 'bookDetail', 'rateBook', 'recommendations', 'home', 'borrowings', 'admin']);
+
+  Object.assign(dictionaries['zh-CN'].common, {
+    appName: '阅读资源智能发现系统',
+    appTagline: '自然语言混合检索 · 证据驱动问答 · 可解释推荐',
+    footer: '阅读资源智能发现系统演示前端，面向毕业设计、检索实验和推荐能力展示。',
+    unknownBook: '未命名资源',
+    viewBook: '查看资源',
+    openBook: '打开资源',
+    nav: {
+      ...(dictionaries['zh-CN'].common.nav || {}),
+      home: '发现首页',
+      books: '资源发现',
+      recommendations: '智能推荐',
+      admin: '资源管理'
+    }
+  });
+
+  Object.assign(dictionaries['zh-CN'].books, {
+    title: '阅读资源发现 - 阅读资源智能发现系统',
+    heroKicker: '自然语言资源发现',
+    overviewKicker: '混合检索提示',
+    heroTitle: '用关键词、自然语言、作者或主题发现下一份阅读资源',
+    heroCopy: '系统会结合精确匹配、BM25 全文检索和向量语义检索，优先返回与你意图更接近的阅读资源。',
+    heroRecommend: '查看智能推荐',
+    filterTitle: '检索与筛选条件',
+    filterSubtitle: '只输入文本时使用智能搜索；补充作者、分类、标签或范围条件后切换为高级筛选。',
+    filterTip: '自然语言适合表达阅读意图，结构化筛选适合精确缩小范围。',
+    keywordPlaceholder: '输入书名、作者、主题，或直接描述你想找的阅读资源',
+    resultsTitle: '资源发现结果',
+    pill1: '支持自然语言与多条件组合检索',
+    pill2: '每份资源展示作者、分类、评分、库存和命中理由',
+    pill3: '可继续查看详情、评分、借阅或预约',
+    sourceLabel: '资源发现',
+    emptyResults: '当前条件下没有匹配的阅读资源。',
+    pageSummary: '第 {{page}} / {{totalPages}} 页，共 {{totalElements}} 份阅读资源',
+    reasonFallback: '来自基础检索结果，可继续查看资源详情。'
+  });
+
+  Object.assign(dictionaries['zh-CN'].bookDetail, {
+    title: '资源详情 - 阅读资源智能发现系统',
+    pageKicker: '阅读资源页',
+    heading: '资源详情',
+    subtitle: '查看阅读资源完整信息，包括作者、出版社、标签、库存、借阅与预约状态。',
+    borrow: '借阅资源',
+    reserve: '预约资源',
+    relatedTitle: '相关资源推荐',
+    relatedCopy: '基于当前资源的同分类、相似标签和检索信号生成推荐结果。',
+    authorShelfCopy: '补充展示同一作者的其他阅读资源，方便继续浏览。',
+    missingId: '缺少资源 ID 参数。'
+  });
+
+  Object.assign(dictionaries['zh-CN'].rateBook, {
+    title: '资源评分 - 阅读资源智能发现系统',
+    heading: '资源评分',
+    submit: '提交评分',
+    back: '返回资源列表'
+  });
+
+  Object.assign(dictionaries['zh-CN'].recommendations, {
+    title: '智能推荐 - 阅读资源智能发现系统',
+    heading: '智能推荐',
+    subtitle: '根据你的阅读偏好、借阅记录、评分行为和近期热门信号，整理值得优先探索的阅读资源。',
+    notesTitle: '推荐依据'
+  });
+
+  Object.assign(dictionaries['zh-CN'].home, {
+    title: '发现首页 - 阅读资源智能发现系统',
+    quickSearchPlaceholder: '按标题、作者、主题、分类或自然语言描述搜索资源',
+    quickSearch: '搜索资源',
+    heroBadge: '自然语言阅读资源发现',
+    heroTitle: '从混合检索、推荐趋势、收藏与提醒开始，快速进入今天的阅读探索。',
+    heroCopy: '首页聚合推荐预览、借阅提醒、近期浏览、热门趋势和新增资源，帮助你从多个线索进入阅读资源发现流程。',
+    heroActionBooks: '进入资源发现',
+    insight6Title: '刚加入系统的资源',
+    categoryTitle: '按分类探索资源',
+    categoryCopy: '从主题分类出发进入资源列表，继续筛选、查看详情与推荐结果。',
+    categoryAction: '查看全部资源',
+    previewCopy: '先在首页查看重点推荐和代表性资源，再进入完整推荐页浏览更多内容。',
+    quickEntryBooksTitle: '资源发现',
+    quickEntryBooksCopy: '按关键词、分类、作者、标签或自然语言继续细筛。'
+  });
+
+  Object.assign(dictionaries['zh-CN'].borrowings, {
+    title: '我的借阅与预约 - 阅读资源智能发现系统',
+    subtitle: '处理续借、归还和预约，清楚掌握每份阅读资源的当前状态。',
+    browseBooks: '浏览资源'
+  });
+
+  Object.assign(dictionaries['zh-CN'].admin, {
+    title: '资源管理 - 阅读资源智能发现系统',
+    heading: '资源管理',
+    subtitle: '维护阅读资源、分类标签和流通数据，并查看近期检索与推荐相关的行为趋势。',
+    bookEditorTitle: '阅读资源管理',
+    bookEditorCopy: '新增、修改或补充阅读资源信息。',
+    bookReset: '新建资源',
+    bookName: '资源标题',
+    bookSave: '保存资源',
+    bookListTitle: '资源列表',
+    bookListCopy: '仅显示当前有效资源，可在这里继续编辑或删除。',
+    bookListSearchLabel: '查找资源',
+    bookListSearchPlaceholder: '按标题、作者或分类搜索资源',
+    categoryListCopy: '如果仍有有效资源引用该分类，则不能删除。',
+    publisherListCopy: '如果仍有有效资源引用该出版社，则不能删除。',
+    tagEditorCopy: '维护资源标签，便于检索和推荐使用。',
+    tagListCopy: '如果仍有有效资源引用该标签，则不能删除。'
+  });
+
+  Object.assign(dictionaries['en-US'].common, {
+    appName: 'ReadSeek',
+    appTagline: 'Natural-language hybrid retrieval, grounded QA, and explainable recommendation',
+    footer: 'ReadSeek demo frontend for reading-resource discovery, retrieval experiments, and recommendation walkthroughs.',
+    unknownBook: 'Untitled resource',
+    viewBook: 'View resource',
+    openBook: 'Open resource',
+    nav: {
+      ...(dictionaries['en-US'].common.nav || {}),
+      home: 'Discovery Home',
+      books: 'Resource Discovery',
+      recommendations: 'Recommendations',
+      admin: 'Resource Admin'
+    }
+  });
+
+  Object.assign(dictionaries['en-US'].books, {
+    title: 'Resource Discovery - ReadSeek',
+    heroKicker: 'Natural-language resource discovery',
+    overviewKicker: 'Hybrid retrieval tips',
+    heroTitle: 'Find the next reading resource by keyword, natural language, author, or topic',
+    heroCopy: 'The system combines exact matching, BM25 full-text retrieval, and vector semantic retrieval to surface resources closer to your intent.',
+    heroRecommend: 'View recommendations',
+    filterTitle: 'Retrieval and filters',
+    filterSubtitle: 'Text-only input uses smart search; author, category, tag, or range filters switch to advanced filtering.',
+    filterTip: 'Natural language is useful for intent; structured filters are useful for narrowing the result set.',
+    keywordPlaceholder: 'Enter a title, author, topic, or describe the resource you want',
+    resultsTitle: 'Discovery results',
+    pill1: 'Supports natural-language search and structured filtering',
+    pill2: 'Each resource shows metadata, availability, and hit reason',
+    pill3: 'Continue to details, rating, borrowing, or reservation',
+    sourceLabel: 'Resource discovery',
+    emptyResults: 'No reading resources match the current criteria.',
+    pageSummary: 'Page {{page}} / {{totalPages}}, {{totalElements}} resources total',
+    reasonFallback: 'From the baseline retrieval result. Open the resource for details.'
+  });
+
+  Object.assign(dictionaries['en-US'].bookDetail, {
+    title: 'Resource Detail - ReadSeek',
+    pageKicker: 'Reading resource',
+    heading: 'Resource detail',
+    subtitle: 'View the complete reading-resource record, including author, publisher, tags, availability, loans, and reservations.',
+    borrow: 'Borrow resource',
+    reserve: 'Reserve resource',
+    relatedTitle: 'Related resource recommendations',
+    relatedCopy: 'Generated from category, tag, and retrieval signals around the current resource.',
+    authorShelfCopy: 'Additional reading resources from the same author for continued browsing.',
+    missingId: 'Missing resource ID parameter.'
+  });
+
+  Object.assign(dictionaries['en-US'].rateBook, {
+    title: 'Rate Resource - ReadSeek',
+    heading: 'Rate resource',
+    submit: 'Submit rating',
+    back: 'Back to resource list'
+  });
+
+  Object.assign(dictionaries['en-US'].recommendations, {
+    title: 'Recommendations - ReadSeek',
+    heading: 'Recommendations',
+    subtitle: 'Browse reading resources prepared from your preferences, borrowing history, rating behavior, and recent popularity signals.',
+    notesTitle: 'Why you are seeing this'
+  });
+
+  Object.assign(dictionaries['en-US'].home, {
+    title: 'Discovery Home - ReadSeek',
+    quickSearchPlaceholder: 'Search by title, author, topic, category, or natural-language description',
+    quickSearch: 'Search resources',
+    heroBadge: 'Natural-language reading-resource discovery',
+    heroTitle: 'Start from hybrid retrieval, recommendation trends, saved items, and reminders.',
+    heroCopy: 'The homepage brings together recommendation previews, loan reminders, recent views, hot trends, and newly added resources for faster discovery.',
+    heroActionBooks: 'Open resource discovery',
+    insight6Title: 'Resources just added to the system',
+    categoryTitle: 'Explore resources by category',
+    categoryCopy: 'Jump into resource lists from themes, then continue filtering, opening details, and browsing recommendations.',
+    categoryAction: 'View all resources',
+    previewCopy: 'Review the key recommendation shelves on the homepage first, then open the full recommendation page for more resources.',
+    quickEntryBooksTitle: 'Resource discovery',
+    quickEntryBooksCopy: 'Continue filtering by keyword, category, author, tag, or natural language.'
+  });
+
+  Object.assign(dictionaries['en-US'].borrowings, {
+    title: 'My Loans and Reservations - ReadSeek',
+    subtitle: 'Handle renewals, returns, and reservations while keeping track of every reading resource you currently manage.',
+    browseBooks: 'Browse resources'
+  });
+
+  Object.assign(dictionaries['en-US'].admin, {
+    title: 'Resource Admin - ReadSeek',
+    heading: 'Resource admin',
+    subtitle: 'Maintain reading resources, category metadata, and circulation data while reviewing search and recommendation trends.',
+    bookEditorTitle: 'Reading resource management',
+    bookEditorCopy: 'Add, update, or complete reading-resource records.',
+    bookReset: 'New resource',
+    bookName: 'Resource title',
+    bookSave: 'Save resource',
+    bookListTitle: 'Resource list',
+    bookListCopy: 'Only active resources are shown here so you can continue editing or remove them.',
+    bookListSearchLabel: 'Find resources',
+    bookListSearchPlaceholder: 'Search by title, author, or category',
+    categoryListCopy: 'Deletion is blocked when active resources still reference this category.',
+    publisherListCopy: 'Deletion is blocked when active resources still reference this publisher.',
+    tagEditorCopy: 'Maintain resource tags used across search and recommendation.',
+    tagListCopy: 'Deletion is blocked when active resources still reference this tag.'
+  });
+
   function getLanguage() {
     const stored = window.localStorage.getItem(STORAGE_KEY);
     return SUPPORTED_LANGUAGES.includes(stored) ? stored : DEFAULT_LANGUAGE;

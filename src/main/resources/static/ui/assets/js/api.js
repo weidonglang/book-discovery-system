@@ -63,12 +63,12 @@
     if (/Invalid email or password/i.test(text)) return '邮箱或密码错误。';
     if (/User email already exists/i.test(text)) return '该邮箱已经被注册。';
     if (/User not found/i.test(text) || /User not exists/i.test(text)) return '用户不存在或登录状态已失效。';
-    if (/Book not found/i.test(text)) return '未找到对应图书。';
+    if (/Book not found/i.test(text)) return '未找到对应阅读资源。';
     if (/Author not found/i.test(text)) return '未找到对应作者。';
     if (/Category not found/i.test(text)) return '未找到对应分类。';
     if (/Publisher not found/i.test(text)) return '未找到对应出版社。';
     if (/Tag not found/i.test(text)) return '未找到对应标签。';
-    if (/Total copies must be at least 1/i.test(text)) return '图书总库存至少为 1。';
+    if (/Total copies must be at least 1/i.test(text)) return '资源总库存至少为 1。';
     if (/Total copies cannot be lower than active borrowed copies/i.test(text)) return '总库存不能小于当前借出数量。';
     if (/You can only update your own profile/i.test(text)) return '普通用户只能修改自己的个人资料。';
     if (/Reservation deleted successfully/i.test(text)) return '预约已删除。';
